@@ -10,23 +10,21 @@ const EditEvent = () => {
     const navigate = useNavigate();
     const selectedEvent = location.state?.event; // 전달받은 이벤트 데이터
 
-    const formatDateForInput = (dateString) => {
+    const formatDateForInput = dateString => {
         const [year, month, day] = dateString.split('-').map(Number);
         const formattedMonth = month.toString().padStart(2, '0');
         const formattedDay = day.toString().padStart(2, '0');
         return `${year}-${formattedMonth}-${formattedDay}`;
     };
 
-    const reverseFormatDate = (dateString) => {
+    const reverseFormatDate = dateString => {
         const [year, month, day] = dateString.split('-').map(Number);
         return `${year}-${month}-${day}`;
     };
 
     // 기존 이벤트 정보 기본 값으로 설정
     const [title, setTitle] = useState(selectedEvent?.title || '');
-    const [date, setDate] = useState(
-        selectedEvent?.date ? formatDateForInput(selectedEvent.date) : ''
-    );
+    const [date, setDate] = useState(selectedEvent?.date ? formatDateForInput(selectedEvent.date) : '');
     const [startTime, setStartTime] = useState(selectedEvent?.time.split(' ~ ')[0] || '08:00');
     const [endTime, setEndTime] = useState(selectedEvent?.time.split(' ~ ')[1] || '09:00');
     const [locationInput, setLocationInput] = useState(selectedEvent?.location || '');
