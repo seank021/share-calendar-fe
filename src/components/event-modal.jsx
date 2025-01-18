@@ -1,40 +1,89 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { doc, deleteDoc } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
+import { db } from '../firebase';
 
 const EventModal = ({ date, events, onClose, onAddEvent }) => {
     const days = ['일', '월', '화', '수', '목', '금', '토'];
     const parsedDate = new Date(date);
     const dayOfWeek = days[parsedDate.getDay()];
+    const [longPressedEvent, setLongPressedEvent] = useState(null);
+    const [pressingEvent, setPressingEvent] = useState(null);
+    let pressTimer = null;
+
+    const handleTouchStart = (event) => {
+        setPressingEvent(event);
+        pressTimer = setTimeout(() => {
+            setLongPressedEvent(event);
+        }, 600);
+    };
+
+    const handleTouchEnd = () => {
+        clearTimeout(pressTimer);
+        setPressingEvent(null);
+    };
+
+    const handleDeleteEvent = async (event) => {
+        if (!event.id) {
+            alert('삭제할 이벤트 ID가 없습니다.');
+            return;
+        }
+
+        if (window.confirm('삭제하시겠습니까?')) {
+            try {
+                const auth = getAuth();
+                const currentUser = auth.currentUser;
+
+                if (!currentUser) {
+                    alert('로그인이 필요합니다.');
+                    return;
+                }
+
+                // Firestore 문서 경로
+                const eventDocRef = doc(db, 'users', currentUser.uid, 'events', event.id);
+                await deleteDoc(eventDocRef);
+                alert('이벤트가 삭제되었습니다.');
+                window.location.reload();
+            } catch (error) {
+                console.error('이벤트 삭제 중 오류 발생:', error);
+                alert('이벤트를 삭제할 수 없습니다.');
+            }
+        }
+    };
 
     return (
         <div
             className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
-            onClick={onClose} // 배경 클릭 시 모달 닫기
+            onClick={onClose}
         >
             <div
                 className="bg-white w-[90%] max-w-md rounded-xl p-5 relative"
-                onClick={e => e.stopPropagation()} // 모달 내용 클릭 시 닫히지 않도록 이벤트 전파 중단
+                onClick={(e) => e.stopPropagation()}
             >
-                {/* 제목 */}
                 <div className="text-left ml-3 pb-2 border-b-[1px] border-gray-200 mb-4">
                     <h2 className="text-xl font-bold">
                         {parsedDate.getMonth() + 1}월 {parsedDate.getDate()}일 {dayOfWeek}요일
                     </h2>
                 </div>
-
-                {/* 이벤트 리스트 */}
                 <div
                     className="space-y-5 overflow-y-auto px-3 py-2"
-                    style={{
-                        maxHeight: '300px', // 최대 높이 설정
-                    }}
+                    style={{ maxHeight: '300px' }}
                 >
                     {events.map((event, idx) => (
-                        <div key={idx} className="flex flex-col">
+                        <div
+                            key={idx}
+                            className={`flex flex-col relative ${
+                                pressingEvent === event ? 'bg-gray-100' : ''
+                            }`}
+                            onTouchStart={() => handleTouchStart(event)}
+                            onTouchEnd={handleTouchEnd}
+                            onTouchCancel={handleTouchEnd}
+                        >
                             <div className="flex items-center">
                                 <div className="flex w-[75px] items-center gap-4">
-                                    {/* 시작 시간 */}
-                                    <div className="text-sm font-bold text-right">{event.time.split(' ~ ')[0]}</div>
-                                    {/* 색상 막대 */}
+                                    <div className="text-sm font-bold text-right">
+                                        {event.time.split(' ~ ')[0]}
+                                    </div>
                                     <div
                                         className="w-[5px] h-5 rounded-md"
                                         style={{ backgroundColor: event.color }}
@@ -47,11 +96,17 @@ const EventModal = ({ date, events, onClose, onAddEvent }) => {
                                     {event.time}&nbsp;&nbsp;{event.location ? `| ${event.location}` : ''}
                                 </div>
                             </div>
+                            {longPressedEvent === event && (
+                                <button
+                                    className="absolute right-0 top-2 bg-red-500 text-white text-sm px-2 py-1 rounded-md hover:bg-red-600"
+                                    onClick={() => handleDeleteEvent(event)}
+                                >
+                                    삭제하기
+                                </button>
+                            )}
                         </div>
                     ))}
                 </div>
-
-                {/* 추가 버튼 */}
                 <button
                     className="mt-4 w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600"
                     onClick={onAddEvent}
