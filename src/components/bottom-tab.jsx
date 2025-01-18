@@ -52,8 +52,9 @@ const BottomTab = () => {
                     }
                     alt="My Calendar"
                     style={{ width: '24px', height: '24px' }}
+                    className='select-none'
                 />
-                <div className="text-sm">내 캘린더</div>
+                <div className="text-sm select-none">내 캘린더</div>
             </div>
             <div
                 onClick={() => handleNavigation('/')}
@@ -71,8 +72,9 @@ const BottomTab = () => {
                     src={location.pathname === '/' ? shareCalendarColor : shareCalendar}
                     alt="Share Calendar"
                     style={{ width: '24px', height: '24px' }}
+                    className='select-none'
                 />
-                <div className="text-sm">공유 캘린더</div>
+                <div className="text-sm select-none">공유 캘린더</div>
             </div>
             <div
                 onClick={() => handleNavigation('/profile')}
@@ -101,8 +103,9 @@ const BottomTab = () => {
                     }
                     alt="Profile"
                     style={{ width: '24px', height: '24px' }}
+                    className='select-none'
                 />
-                <div className="text-sm">프로필</div>
+                <div className="text-sm select-none">프로필</div>
             </div>
         </div>
     );

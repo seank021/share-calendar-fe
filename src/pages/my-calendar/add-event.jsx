@@ -9,7 +9,7 @@ const AddEvent = () => {
     const navigate = useNavigate();
     const date = new URLSearchParams(location.search).get('date');
 
-    const titleInputRef = useRef(null); // 제목 input을 참조하는 ref
+    // const titleInputRef = useRef(null); // 제목 input을 참조하는 ref
     const [title, setTitle] = useState('');
     const [startTime, setStartTime] = useState('08:00');
     const [endTime, setEndTime] = useState('09:00');
@@ -19,9 +19,9 @@ const AddEvent = () => {
     const [showColorModal, setShowColorModal] = useState(false);
 
     // 컴포넌트가 마운트된 후 제목 input에 포커스
-    useEffect(() => {
-        titleInputRef.current?.focus();
-    }, []);
+    // useEffect(() => {
+    //     titleInputRef.current?.focus();
+    // }, []);
 
     const handleSave = async () => {
         if (!title) {
@@ -81,7 +81,7 @@ const AddEvent = () => {
                 {/* 제목 + 색상 선택 */}
                 <div className="flex items-center">
                     <input
-                        ref={titleInputRef} // 제목 input에 ref 연결
+                        // ref={titleInputRef} // 제목 input에 ref 연결
                         type="text"
                         value={title}
                         onChange={e => setTitle(e.target.value)}
