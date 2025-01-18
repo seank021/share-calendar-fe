@@ -8,19 +8,16 @@ const EventModal = ({ date, events, onClose, onAddEvent }) => {
     const parsedDate = new Date(date);
     const dayOfWeek = days[parsedDate.getDay()];
     const [longPressedEvent, setLongPressedEvent] = useState(null);
-    const [pressingEvent, setPressingEvent] = useState(null);
     let pressTimer = null;
 
     const handleTouchStart = (event) => {
-        setPressingEvent(event);
         pressTimer = setTimeout(() => {
             setLongPressedEvent(event);
         }, 600);
     };
 
     const handleTouchEnd = () => {
-        clearTimeout(pressTimer);
-        setPressingEvent(null);
+        clearTimeout(pressTimer); // 손을 뗄 때 타이머 해제
     };
 
     const handleDeleteEvent = async (event) => {
@@ -39,11 +36,10 @@ const EventModal = ({ date, events, onClose, onAddEvent }) => {
                     return;
                 }
 
-                // Firestore 문서 경로
                 const eventDocRef = doc(db, 'users', currentUser.uid, 'events', event.id);
                 await deleteDoc(eventDocRef);
                 alert('이벤트가 삭제되었습니다.');
-                window.location.reload();
+                window.location.reload(); // 페이지 새로고침
             } catch (error) {
                 console.error('이벤트 삭제 중 오류 발생:', error);
                 alert('이벤트를 삭제할 수 없습니다.');
@@ -57,8 +53,9 @@ const EventModal = ({ date, events, onClose, onAddEvent }) => {
             onClick={onClose}
         >
             <div
-                className="bg-white w-[90%] max-w-md rounded-xl p-5 relative"
+                className="bg-white w-[90%] max-w-md rounded-xl p-5 relative select-none" // 텍스트 선택 방지
                 onClick={(e) => e.stopPropagation()}
+                onContextMenu={(e) => e.preventDefault()} // 꾹 눌렀을 때 기본 메뉴 방지
             >
                 <div className="text-left ml-3 pb-2 border-b-[1px] border-gray-200 mb-4">
                     <h2 className="text-xl font-bold">
@@ -72,12 +69,11 @@ const EventModal = ({ date, events, onClose, onAddEvent }) => {
                     {events.map((event, idx) => (
                         <div
                             key={idx}
-                            className={`flex flex-col relative ${
-                                pressingEvent === event ? 'bg-gray-100' : ''
-                            }`}
+                            className="flex flex-col relative select-none" // 텍스트 선택 방지
                             onTouchStart={() => handleTouchStart(event)}
                             onTouchEnd={handleTouchEnd}
                             onTouchCancel={handleTouchEnd}
+                            onContextMenu={(e) => e.preventDefault()} // 꾹 눌렀을 때 기본 메뉴 방지
                         >
                             <div className="flex items-center">
                                 <div className="flex w-[75px] items-center gap-4">
@@ -98,7 +94,7 @@ const EventModal = ({ date, events, onClose, onAddEvent }) => {
                             </div>
                             {longPressedEvent === event && (
                                 <button
-                                    className="absolute right-0 top-2 bg-red-500 text-white text-sm px-2 py-1 rounded-md hover:bg-red-600"
+                                    className="absolute right-0 top-1 bg-red-500 text-white text-sm px-2 py-1 rounded-md hover:bg-red-600"
                                     onClick={() => handleDeleteEvent(event)}
                                 >
                                     삭제하기

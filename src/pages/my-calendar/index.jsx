@@ -102,6 +102,7 @@ const MyCalendar = () => {
                 if (deltaX > 50) handleSwipe('left');
                 else if (deltaX < -50) handleSwipe('right');
             }}
+            className='select-none'
         >
             <Calendar events={events} onDateClick={handleDateClick} currentDate={currentDate} />
             {showModal && selectedDate && (

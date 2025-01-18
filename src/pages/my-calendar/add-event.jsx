@@ -59,7 +59,7 @@ const AddEvent = () => {
     };
 
     return (
-        <div className="flex flex-col bg-white h-[calc(100vh-4rem)]">
+        <div className="flex flex-col bg-white h-[calc(100vh-4rem)] w-full">
             {/* 상단 헤더 */}
             <div className="flex items-center justify-between px-4 py-3 border-b">
                 <button onClick={() => navigate(-1)}>
@@ -97,14 +97,14 @@ const AddEvent = () => {
                             type="time"
                             value={startTime}
                             onChange={e => setStartTime(e.target.value)}
-                            className="flex-1 border rounded px-2 py-1 focus:outline-none"
+                            className="flex-1 border rounded px-2 py-1 focus:outline-none w-[48%]"
                         />
                         <span className="mx-2 text-gray-500">→</span>
                         <input
                             type="time"
                             value={endTime}
                             onChange={e => setEndTime(e.target.value)}
-                            className="flex-1 border rounded px-2 py-1 focus:outline-none"
+                            className="flex-1 border rounded px-2 py-1 focus:outline-none w-[48%]"
                         />
                     </div>
                 </div>
@@ -135,16 +135,16 @@ const AddEvent = () => {
             </div>
 
             {/* 저장 및 취소 버튼 */}
-            <div className="flex w-full items-center justify-between px-4 py-3">
+            <div className="flex w-full items-center justify-center px-4 py-3 gap-3">
                 <button
                     onClick={() => navigate(-1)}
-                    className="px-4 py-2 border rounded text-gray-500 hover:bg-gray-100 w-[48%]"
+                    className="px-4 py-2 border rounded text-gray-500 hover:bg-gray-100 w-[45%]"
                 >
                     취소
                 </button>
                 <button
                     onClick={handleSave}
-                    className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 w-[48%]"
+                    className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 w-[45%]"
                 >
                     저장
                 </button>
