@@ -19,7 +19,7 @@ const Login = () => {
     };
 
     return (
-        <div className="container-col justify-center items-center h-[calc(100vh-4rem)]">
+        <div className="flex flex-col justify-center items-center h-[calc(100vh-4rem)]">
             <img src="/images/logo-bg.png" alt="logo" className="w-[85%] mx-auto" />
             <div className="flex flex-col w-[85%] mx-auto gap-4 mt-10">
                 <input
