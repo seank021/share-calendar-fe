@@ -154,7 +154,7 @@ const MyCalendar = () => {
                     date={selectedDate.date}
                     events={selectedDate.events}
                     onClose={() => setShowModal(false)}
-                    onAddEvent={() => (window.location.href = `/add-event?date=${selectedDate.date}`)}
+                    onAddEvent={() => navigate(`/add-event?date=${selectedDate.date}`)}
                 />
             )}
         </div>
