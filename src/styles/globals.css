@@ -1,0 +1,7 @@
+.container-col {
+    @apply flex flex-col;
+}
+
+.bottom-tab {
+    @apply fixed bottom-0 left-0 w-full h-16 bg-white shadow-md flex justify-around items-center border-t border-gray-300;
+}
