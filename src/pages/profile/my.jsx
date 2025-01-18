@@ -5,7 +5,7 @@ const My = ({ setIsLoggedIn }) => {
     };
 
     return (
-        <div>
+        <div className="container-col min-h-screen bg-gray-100">
             <h1>My</h1>
             <button onClick={onClickLogout}>Logout</button>
         </div>
