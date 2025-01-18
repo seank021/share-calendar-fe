@@ -43,7 +43,7 @@ const Calendar = ({ events, onDateClick, currentDate }) => {
                 )}
             </div>
             <div
-                className="grid grid-cols-7 gap-1"
+                className="grid grid-cols-7 gap-[0.7px]"
                 style={{
                     height: 'calc(100vh - 150px)',
                     gridAutoRows: '1fr', // 균일한 높이 유지
