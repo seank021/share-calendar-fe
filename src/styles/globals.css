@@ -1,5 +1,5 @@
 .container-col {
-    @apply flex flex-col min-h-screen;
+    @apply flex flex-col;
 }
 
 .bottom-tab {

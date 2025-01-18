@@ -19,27 +19,27 @@ const Login = () => {
     };
 
     return (
-        <div className="container-col">
-            <h1 className="text-3xl font-bold text-center py-4">Login</h1>
-            <div className="flex flex-col w-[85%] mx-auto gap-4">
+        <div className="container-col justify-center items-center h-[calc(100vh-4rem)]">
+            <img src="/images/logo-bg.png" alt="logo" className="w-[85%] mx-auto" />
+            <div className="flex flex-col w-[85%] mx-auto gap-4 mt-10">
                 <input
                     type="email"
-                    placeholder="email"
+                    placeholder="이메일을 입력해주세요"
                     className="border border-gray-300 p-2"
                     onChange={e => setEmail(e.target.value)}
                 />
                 <input
                     type="password"
-                    placeholder="password"
+                    placeholder="비밀번호를 입력해주세요"
                     className="border border-gray-300 p-2"
                     onChange={e => setPassword(e.target.value)}
                 />
                 <button onClick={onClickLogin} className="bg-blue-500 text-white py-2">
-                    Login
+                    로그인
                 </button>
             </div>
-            <h2 className="text-center mt-4" onClick={() => navigate('/signup')}>
-                Sign up
+            <h2 className="text-center mt-4 underline text-gray-400 text-sm" onClick={() => navigate('/signup')}>
+                계정이 없다면?
             </h2>
         </div>
     );
