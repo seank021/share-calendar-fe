@@ -12,7 +12,7 @@ const MyCalendar = () => {
     useEffect(() => {
         const accessToken = localStorage.getItem('accessToken');
         if (!accessToken) {
-            alert('Please login first');
+            alert('로그인이 필요합니다.');
             navigate('/profile');
         }
     }, [navigate]);

@@ -16,7 +16,7 @@ const BottomTab = () => {
     const handleNavigation = path => {
         const accessToken = localStorage.getItem('accessToken');
         if (!accessToken && (path === '/' || path === '/my-calendar')) {
-            alert('You must be logged in to access this page.');
+            alert('로그인이 필요합니다.');
             navigate('/profile');
         } else {
             navigate(path);
