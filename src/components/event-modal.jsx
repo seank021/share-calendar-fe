@@ -71,7 +71,11 @@ const EventModal = ({ date, events, onClose, onAddEvent }) => {
                             onTouchEnd={handleTouchEnd}
                             onTouchCancel={handleTouchEnd}
                             onContextMenu={e => e.preventDefault()} // 꾹 눌렀을 때 기본 메뉴 방지
-                            onClick={() => navigate('/edit-event', { state: { event } })}
+                            onClick={() => {
+                                if (!longPressedEvent) {
+                                    navigate('/edit-event', { state: { event } });
+                                }
+                            }}
                         >
                             <div className="flex items-center">
                                 <div className="flex w-[75px] items-center gap-4">
@@ -91,7 +95,10 @@ const EventModal = ({ date, events, onClose, onAddEvent }) => {
                             {longPressedEvent === event && (
                                 <button
                                     className="absolute right-0 top-1 bg-red-500 text-white text-sm px-2 py-1 rounded-md hover:bg-red-600"
-                                    onClick={() => handleDeleteEvent(event)}
+                                    onClick={e => {
+                                        e.stopPropagation(); // 이벤트 전파 중단
+                                        handleDeleteEvent(event);
+                                    }}
                                 >
                                     삭제하기
                                 </button>
