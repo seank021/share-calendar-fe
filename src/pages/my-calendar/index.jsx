@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Calendar from '../../components/calendar';
+import EventModal from '../../components/event-modal';
 
 const MyCalendar = () => {
     const navigate = useNavigate();
@@ -15,29 +16,29 @@ const MyCalendar = () => {
 
     const [currentDate, setCurrentDate] = useState(new Date());
     const [events, setEvents] = useState([
-        { date: '2025-1-1', title: 'Event 1 안녕하세용~', color: 'red', time: '10:00 ~ 13:00', location: '홍대' },
-        { date: '2025-1-1', title: 'Event 1 안녕하세용~', color: 'red', time: '14:00 ~ 15:00', location: '홍대' },
-        { date: '2025-1-1', title: 'Event 1', color: 'red', time: '16:00 ~ 17:00', location: '홍대' },
-        { date: '2025-1-1', title: 'Event 1 안녕하세용~', color: 'red', time: '18:00 ~ 19:00', location: '홍대' },
-        { date: '2025-1-3', title: 'Event 2', color: 'blue', time: '10:00 ~ 13:00', location: '강남' },
-        { date: '2025-1-5', title: 'Event 3', color: 'green', time: '10:00 ~ 13:00', location: '신촌' },
-        { date: '2025-1-7', title: 'Event 4', color: '#000', time: '10:00 ~ 13:00', location: '건대' },
-        { date: '2025-1-9', title: 'Event 5', color: 'purple', time: '10:00 ~ 13:00', location: '홍대' },
-        { date: '2025-1-11', title: 'Event 6', color: 'orange', time: '10:00 ~ 13:00', location: '강남' },
-        { date: '2025-1-13', title: 'Event 7', color: 'pink', time: '10:00 ~ 13:00', location: '신촌' },
-        { date: '2025-1-15', title: 'Event 8', color: 'brown', time: '10:00 ~ 13:00', location: '건대' },
-        { date: '2025-1-17', title: 'Event 9', color: 'black', time: '10:00 ~ 13:00', location: '홍대' },
-        { date: '2025-1-19', title: 'Event 10 asdfasdfsadf', color: 'gray', time: '10:00 ~ 13:00', location: '강남' },
-        { date: '2025-1-19', title: 'Event 10', color: 'gray', time: '10:00 ~ 13:00', location: '강남' },
-        { date: '2025-1-19', title: 'Event 10', color: 'gray', time: '10:00 ~ 13:00', location: '강남' },
-        { date: '2025-1-30', title: 'Event 10', color: 'gray', time: '10:00 ~ 13:00', location: '강남' },
+        { date: '2025-1-1', title: 'Event 1 안녕하세용~', color: '#FF6F61', time: '10:00 ~ 13:00', location: '홍대', memo: '메모입니다.' },
+        { date: '2025-1-1', title: 'Event 1 안녕하세용~', color: '#6BCB77', time: '14:00 ~ 15:00', location: '홍대', memo: '메모입니다.' },
+        { date: '2025-1-1', title: 'Event 1', color: '#4D96FF', time: '16:00 ~ 17:00', location: '홍대', memo: '메모입니다.' },
+        { date: '2025-1-3', title: 'Event 2', color: '#14532D', time: '10:00 ~ 13:00', location: '강남', memo: '메모입니다.' },
+        { date: '2025-1-5', title: 'Event 3', color: '#355C7D', time: '10:00 ~ 13:00', location: '신촌', memo: '메모입니다.' },
+        { date: '2025-1-7', title: 'Event 4', color: '#D72638', time: '10:00 ~ 13:00', location: '건대', memo: '메모입니다.' },
+        { date: '2025-1-11', title: 'Event 6', color: '#FFC400', time: '10:00 ~ 13:00', location: '강남', memo: '메모입니다.' },
+        { date: '2025-1-13', title: 'Event 7', color: '#A29BFE', time: '10:00 ~ 13:00', location: '신촌', memo: '메모입니다.' },
+        { date: '2025-1-19', title: 'Event 10 asdfasdfsadf', color: '#F9A825', time: '10:00 ~ 13:00', location: '강남', memo: '메모입니다.' },
+        { date: '2025-1-31', title: 'Event 10', color: '#5F3DC4', time: '10:00 ~ 13:00', location: '강남', memo: '메모입니다.' },
     ]);
+    const [selectedDate, setSelectedDate] = useState(null);
+    const [showModal, setShowModal] = useState(false);
 
     const handleDateClick = date => {
         console.log(date);
-        const dayEvents = events.filter(event => event.date === date);
+        const dayEvents = events
+                            .filter(event => event.date === date)
+                            .sort((a, b) => new Date(`2025-01-01 ${a.time.split(' ~ ')[0]}`) - new Date(`2025-01-01 ${b.time.split(' ~ ')[0]}`));
         if (dayEvents.length > 0) {
             // 일정이 있으면 이벤트 리스트 모달 띄우기
+            setSelectedDate({ date, events: dayEvents });
+            setShowModal(true);
         } else {
             // 일정이 없으면 추가 페이지로 이동
             window.location.href = `/add-event?date=${date}`;
@@ -64,6 +65,14 @@ const MyCalendar = () => {
             }}
         >
             <Calendar events={events} onDateClick={handleDateClick} currentDate={currentDate} />
+            {showModal && selectedDate && (
+                <EventModal
+                    date={selectedDate.date}
+                    events={selectedDate.events}
+                    onClose={() => setShowModal(false)}
+                    onAddEvent={() => window.location.href = `/add-event?date=${selectedDate.date}`}
+                />
+            )}
         </div>
     );
 };
