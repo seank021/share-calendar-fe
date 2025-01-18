@@ -7,6 +7,7 @@ import BottomTab from './components/bottom-tab';
 /* pages */
 import MyCalendar from './pages/my-calendar';
 import AddEvent from './pages/my-calendar/add-event';
+import EditEvent from './pages/my-calendar/edit-event';
 import ShareCalendar from './pages/share-calendar';
 import Profile from './pages/profile';
 import Login from './pages/profile/login';
@@ -19,6 +20,7 @@ const App = () => {
                 <Routes>
                     <Route path="/my-calendar" element={<MyCalendar />} />
                     <Route path="/add-event" element={<AddEvent />} />
+                    <Route path="/edit-event" element={<EditEvent />} />
                     <Route path="/" element={<ShareCalendar />} />
                     <Route path="/profile" element={<Profile />} />
                     <Route path="/login" element={<Login />} />

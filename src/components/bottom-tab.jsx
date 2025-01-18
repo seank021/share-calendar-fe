@@ -30,7 +30,11 @@ const BottomTab = () => {
                 style={{
                     textDecoration: 'none',
                     color:
-                        location.pathname === '/my-calendar' || location.pathname === '/add-event' ? '#007BFF' : '#000',
+                        location.pathname === '/my-calendar' ||
+                        location.pathname === '/add-event' ||
+                        location.pathname === '/edit-event'
+                            ? '#007BFF'
+                            : '#000',
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
@@ -40,7 +44,9 @@ const BottomTab = () => {
             >
                 <img
                     src={
-                        location.pathname === '/my-calendar' || location.pathname === '/add-event'
+                        location.pathname === '/my-calendar' ||
+                        location.pathname === '/add-event' ||
+                        location.pathname === '/edit-event'
                             ? calendarColor
                             : calendar
                     }
