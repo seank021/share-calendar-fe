@@ -24,7 +24,7 @@ const BottomTab = () => {
     };
 
     return (
-        <div className="bottom-tab">
+        <div className="bottom-tab select-none">
             <div
                 onClick={() => handleNavigation('/my-calendar')}
                 style={{
