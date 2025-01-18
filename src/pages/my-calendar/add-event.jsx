@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import ColorSelectModal from '../../components/color-select-modal';
 import { getAuth } from 'firebase/auth';
 import { collection, addDoc } from 'firebase/firestore';
 import { app, db } from '../../firebase';
 
 const AddEvent = () => {
-    const location = useLocation();
     const navigate = useNavigate();
     const date = new URLSearchParams(location.search).get('date');
 
+    const titleInputRef = useRef(null); // 제목 input을 참조하는 ref
     const [title, setTitle] = useState('');
     const [startTime, setStartTime] = useState('08:00');
     const [endTime, setEndTime] = useState('09:00');
@@ -17,6 +17,11 @@ const AddEvent = () => {
     const [memo, setMemo] = useState('');
     const [color, setColor] = useState('#4D96FF'); // Default color
     const [showColorModal, setShowColorModal] = useState(false);
+
+    // 컴포넌트가 마운트된 후 제목 input에 포커스
+    useEffect(() => {
+        titleInputRef.current?.focus();
+    }, []);
 
     const handleSave = async () => {
         if (!title) {
@@ -76,6 +81,7 @@ const AddEvent = () => {
                 {/* 제목 + 색상 선택 */}
                 <div className="flex items-center">
                     <input
+                        ref={titleInputRef} // 제목 input에 ref 연결
                         type="text"
                         value={title}
                         onChange={e => setTitle(e.target.value)}
