@@ -19,7 +19,7 @@ const Login = () => {
     };
 
     return (
-        <div className="container-col min-h-screen bg-gray-100">
+        <div className="container-col">
             <h1 className="text-3xl font-bold text-center py-4">Login</h1>
             <div className="flex flex-col w-[85%] mx-auto gap-4">
                 <input
