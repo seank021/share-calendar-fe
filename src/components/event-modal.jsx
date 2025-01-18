@@ -44,7 +44,7 @@ const EventModal = ({ date, events, onClose, onAddEvent }) => {
                             </div>
                             <div className="flex-1">
                                 <div className="ml-[75px] text-xs text-gray-400">
-                                    {event.time}&nbsp;&nbsp;{event.location}
+                                    {event.time}&nbsp;&nbsp;{event.location ? `| ${event.location}` : ''}
                                 </div>
                             </div>
                         </div>

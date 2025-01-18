@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import ColorSelectModal from '../../components/color-select-modal';
+import { getAuth } from 'firebase/auth';
+import { collection, addDoc } from 'firebase/firestore';
+import { app, db } from '../../firebase';
 
 const AddEvent = () => {
     const location = useLocation();
@@ -15,7 +18,7 @@ const AddEvent = () => {
     const [color, setColor] = useState('#4D96FF'); // Default color
     const [showColorModal, setShowColorModal] = useState(false);
 
-    const handleSave = () => {
+    const handleSave = async () => {
         if (!title) {
             alert('제목을 입력하세요');
             return;
@@ -23,6 +26,15 @@ const AddEvent = () => {
 
         if (startTime >= endTime) {
             alert('시작 시간은 종료 시간보다 늦을 수 없습니다');
+            return;
+        }
+
+        const auth = getAuth(app);
+        const currentUser = auth.currentUser;
+
+        if (!currentUser) {
+            alert('로그인이 필요합니다');
+            navigate('/login');
             return;
         }
 
@@ -34,7 +46,16 @@ const AddEvent = () => {
             location: locationInput,
             memo,
         };
-        console.log(event);
+
+        try {
+            const eventsRef = collection(db, 'users', currentUser.uid, 'events');
+            await addDoc(eventsRef, event);
+            alert('이벤트가 저장되었습니다.');
+            navigate(-1); // 이전 화면으로 이동
+        } catch (error) {
+            console.error('이벤트 저장 실패:', error);
+            alert('이벤트 저장 중 오류가 발생했습니다.');
+        }
     };
 
     return (
