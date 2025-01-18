@@ -14,7 +14,7 @@ const Signup = () => {
     const onClickSignup = async () => {
         const user = await signup(email, password, password_, nickname);
         if (user) {
-            console.log(user); 
+            console.log(user);
             localStorage.setItem('accessToken', user.accessToken);
             navigate('/');
         }
@@ -48,10 +48,7 @@ const Signup = () => {
                     className="border border-gray-300 p-2"
                     onChange={e => setNickname(e.target.value)}
                 />
-                <button
-                    onClick={onClickSignup}
-                    className="bg-blue-500 text-white py-2"
-                >
+                <button onClick={onClickSignup} className="bg-blue-500 text-white py-2">
                     Signup
                 </button>
             </div>

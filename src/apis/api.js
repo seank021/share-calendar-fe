@@ -1,4 +1,4 @@
-import app from '../firebase';
+import { app } from '../firebase';
 import { getAuth, createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword } from 'firebase/auth';
 
 export const signup = async (email, password, password_, nickname) => {
@@ -21,7 +21,7 @@ export const signup = async (email, password, password_, nickname) => {
             alert('회원가입에 실패했습니다.');
         }
     }
-}
+};
 
 export const login = async (email, password) => {
     try {
@@ -31,4 +31,4 @@ export const login = async (email, password) => {
     } catch (error) {
         alert('입력한 정보를 다시 확인해주세요.');
     }
-}
+};

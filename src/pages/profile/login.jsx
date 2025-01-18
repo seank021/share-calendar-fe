@@ -34,10 +34,7 @@ const Login = () => {
                     className="border border-gray-300 p-2"
                     onChange={e => setPassword(e.target.value)}
                 />
-                <button
-                    onClick={onClickLogin}
-                    className="bg-blue-500 text-white py-2"
-                >
+                <button onClick={onClickLogin} className="bg-blue-500 text-white py-2">
                     Login
                 </button>
             </div>
