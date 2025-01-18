@@ -67,7 +67,10 @@ const BottomTab = () => {
                 onClick={() => handleNavigation('/profile')}
                 style={{
                     textDecoration: 'none',
-                    color: location.pathname === '/profile' ? '#007BFF' : '#000',
+                    color: location.pathname === '/profile' ||
+                            location.pathname === '/login' ||
+                            location.pathname === '/signup'
+                            ? '#007BFF' : '#000',
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
@@ -76,7 +79,10 @@ const BottomTab = () => {
                 }}
             >
                 <img
-                    src={location.pathname === '/profile' ? profileColor : profile}
+                    src={location.pathname === '/profile'
+                        || location.pathname === '/login'
+                        || location.pathname === '/signup'
+                        ? profileColor : profile}
                     alt="Profile"
                     style={{ width: '24px', height: '24px' }}
                 />

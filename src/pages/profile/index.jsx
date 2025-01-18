@@ -13,7 +13,7 @@ const Profile = () => {
     }, []);
 
     if (!isLoggedIn) {
-        return <Login setIsLoggedIn={setIsLoggedIn} />;
+        return <Login />;
     }
 
     return <My setIsLoggedIn={setIsLoggedIn} />;
