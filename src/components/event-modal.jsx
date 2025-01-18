@@ -12,7 +12,7 @@ const EventModal = ({ date, events, onClose, onAddEvent }) => {
         >
             <div
                 className="bg-white w-[90%] max-w-md rounded-xl p-5 relative"
-                onClick={(e) => e.stopPropagation()} // 모달 내용 클릭 시 닫히지 않도록 이벤트 전파 중단
+                onClick={e => e.stopPropagation()} // 모달 내용 클릭 시 닫히지 않도록 이벤트 전파 중단
             >
                 {/* 제목 */}
                 <div className="text-left ml-3 pb-2 border-b-[1px] border-gray-200 mb-4">
@@ -30,12 +30,10 @@ const EventModal = ({ date, events, onClose, onAddEvent }) => {
                 >
                     {events.map((event, idx) => (
                         <div key={idx} className="flex flex-col">
-                            <div className="flex items-center">   
+                            <div className="flex items-center">
                                 <div className="flex w-[75px] items-center gap-4">
                                     {/* 시작 시간 */}
-                                    <div className="text-sm font-bold text-right">
-                                        {event.time.split(' ~ ')[0]}
-                                    </div>
+                                    <div className="text-sm font-bold text-right">{event.time.split(' ~ ')[0]}</div>
                                     {/* 색상 막대 */}
                                     <div
                                         className="w-[5px] h-5 rounded-md"
