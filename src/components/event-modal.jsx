@@ -56,7 +56,7 @@ const EventModal = ({ date, events, onClose, onAddEvent }) => {
                     className="mt-4 w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600"
                     onClick={onAddEvent}
                 >
-                    + {parsedDate.getMonth() + 1}월 {parsedDate.getDate()}일에 추가
+                    + {parsedDate.getMonth() + 1}월 {parsedDate.getDate()}일에 일정 추가
                 </button>
             </div>
         </div>

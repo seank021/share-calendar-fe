@@ -29,7 +29,8 @@ const BottomTab = () => {
                 onClick={() => handleNavigation('/my-calendar')}
                 style={{
                     textDecoration: 'none',
-                    color: location.pathname === '/my-calendar' ? '#007BFF' : '#000',
+                    color:
+                        location.pathname === '/my-calendar' || location.pathname === '/add-event' ? '#007BFF' : '#000',
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
@@ -38,7 +39,11 @@ const BottomTab = () => {
                 }}
             >
                 <img
-                    src={location.pathname === '/my-calendar' ? calendarColor : calendar}
+                    src={
+                        location.pathname === '/my-calendar' || location.pathname === '/add-event'
+                            ? calendarColor
+                            : calendar
+                    }
                     alt="My Calendar"
                     style={{ width: '24px', height: '24px' }}
                 />
