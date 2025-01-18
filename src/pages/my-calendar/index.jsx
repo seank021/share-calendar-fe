@@ -33,9 +33,9 @@ const MyCalendar = () => {
         { date: '2025-1-30', title: 'Event 10', color: 'gray', time: '10:00 ~ 13:00', location: '강남' },
     ]);
 
-    const handleDateClick = (date) => {
+    const handleDateClick = date => {
         console.log(date);
-        const dayEvents = events.filter((event) => event.date === date);
+        const dayEvents = events.filter(event => event.date === date);
         if (dayEvents.length > 0) {
             // 일정이 있으면 이벤트 리스트 모달 띄우기
         } else {
@@ -44,7 +44,7 @@ const MyCalendar = () => {
         }
     };
 
-    const handleSwipe = (direction) => {
+    const handleSwipe = direction => {
         const newDate = new Date(currentDate);
         if (direction === 'left') {
             newDate.setMonth(currentDate.getMonth() - 1);
@@ -56,18 +56,14 @@ const MyCalendar = () => {
 
     return (
         <div
-            onTouchStart={(e) => (e.currentTarget.startX = e.touches[0].clientX)}
-            onTouchEnd={(e) => {
+            onTouchStart={e => (e.currentTarget.startX = e.touches[0].clientX)}
+            onTouchEnd={e => {
                 const deltaX = e.changedTouches[0].clientX - e.currentTarget.startX;
                 if (deltaX > 50) handleSwipe('left');
                 else if (deltaX < -50) handleSwipe('right');
             }}
         >
-            <Calendar
-                events={events}
-                onDateClick={handleDateClick}
-                currentDate={currentDate}
-            />
+            <Calendar events={events} onDateClick={handleDateClick} currentDate={currentDate} />
         </div>
     );
 };

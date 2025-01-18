@@ -16,29 +16,31 @@ const Calendar = ({ events, onDateClick, currentDate }) => {
     // 오늘 날짜 정보
     const today = new Date();
     const isToday = (currentYear, currentMonth, day) =>
-        today.getFullYear() === currentYear &&
-        today.getMonth() === currentMonth &&
-        today.getDate() === day;
+        today.getFullYear() === currentYear && today.getMonth() === currentMonth && today.getDate() === day;
 
     return (
         <div className="p-3">
             <div className="text-center mb-4">
-                {year !== new Date().getFullYear() && (
-                    <span className="text-xl font-semibold">{year}년 {month + 1}월</span>
-                ) || (
-                    <span className="text-xl font-semibold">{month + 1}월</span>
-                )}
+                {(year !== new Date().getFullYear() && (
+                    <span className="text-xl font-semibold">
+                        {year}년 {month + 1}월
+                    </span>
+                )) || <span className="text-xl font-semibold">{month + 1}월</span>}
             </div>
             <div className="grid grid-cols-7 text-center font-semibold text-sm pb-1 border-b-[1px] mb-1">
-                {weekDays.map((day, idx) => (
-                    day === '일' && (
-                        <div key={idx} className="text-red-500">{day}</div>
-                    ) || day === '토' && (
-                        <div key={idx} className="text-blue-500">{day}</div>
-                    ) || (
-                        <div key={idx}>{day}</div>
-                    )
-                ))}
+                {weekDays.map(
+                    (day, idx) =>
+                        (day === '일' && (
+                            <div key={idx} className="text-red-500">
+                                {day}
+                            </div>
+                        )) ||
+                        (day === '토' && (
+                            <div key={idx} className="text-blue-500">
+                                {day}
+                            </div>
+                        )) || <div key={idx}>{day}</div>
+                )}
             </div>
             <div
                 className="grid grid-cols-7 gap-1"
@@ -61,11 +63,7 @@ const Calendar = ({ events, onDateClick, currentDate }) => {
                             className="bg-white cursor-pointer flex flex-col justify-start overflow-hidden"
                             onClick={() => onDateClick(date)}
                         >
-                            <span
-                                className={`text-center ${isCurrentDay ? 'text-red-500' : ''}`}
-                            >
-                                {day + 1}
-                            </span>
+                            <span className={`text-center ${isCurrentDay ? 'text-red-500' : ''}`}>{day + 1}</span>
                             <div className="flex flex-col gap-[1px]" style={{ flex: 1 }}>
                                 {dayEvents.slice(0, 3).map((event, idx) => (
                                     <span
@@ -83,9 +81,7 @@ const Calendar = ({ events, onDateClick, currentDate }) => {
                                     </span>
                                 ))}
                                 {dayEvents.length > 3 && (
-                                    <span className="text-xs text-gray-500">
-                                        +{dayEvents.length - 3}
-                                    </span>
+                                    <span className="text-xs text-gray-500">+{dayEvents.length - 3}</span>
                                 )}
                             </div>
                         </div>
