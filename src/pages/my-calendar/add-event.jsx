@@ -47,7 +47,7 @@ const AddEvent = () => {
                 <h1 className="text-lg font-bold">
                     {date.split('-')[1]}월 {date.split('-')[2]}일 일정 추가
                 </h1>
-                <div></div> {/* 오른쪽 빈 공간 */}
+                <div className="w-6"></div>
             </div>
 
             {/* 내용 */}
