@@ -65,14 +65,12 @@ const Calendar = ({ events, onDateClick, currentDate }) => {
                         >
                             <div className="flex justify-center items-center">
                                 {isCurrentDay ? (
-                                    <div className="w-[20px] h-[20px] bg-red-500 text-white rounded-full flex items-center justify-center">
-                                        {day + 1}
-                                    </div>
+                                    <div className="text-[#FF0000] text-center">{day + 1}</div>
                                 ) : (
                                     <span className="text-center">{day + 1}</span>
                                 )}
                             </div>
-                            <div className="flex flex-col gap-[1px] mt-[1px]" style={{ flex: 1 }}>
+                            <div className="flex flex-col gap-[1px]" style={{ flex: 1 }}>
                                 {dayEvents.slice(0, 3).map((event, idx) => (
                                     <span
                                         key={idx}
