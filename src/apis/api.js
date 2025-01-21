@@ -163,8 +163,10 @@ export const verifyEmail = async () => {
     }
 
     try {
-        await sendEmailVerification(currentUser);
-        alert('이메일 인증 요청을 보냈습니다. 이메일을 확인하세요.');
+        if (window.confirm('이메일 인증 요청을 보내시겠습니까?')) {
+            await sendEmailVerification(currentUser);
+            alert('이메일 인증 요청을 보냈습니다. 이메일을 확인하세요.');
+        }
     } catch (error) {
         console.error('이메일 인증 요청 실패:', error);
         alert('이메일 인증 요청에 실패했습니다.');
