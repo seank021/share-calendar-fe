@@ -19,7 +19,7 @@ const Calendar = ({ events, onDateClick, currentDate }) => {
         today.getFullYear() === currentYear && today.getMonth() === currentMonth && today.getDate() === day;
 
     return (
-        <div className="px-2 py-3">
+        <div className="px-1 py-3">
             <div className="text-center mb-4">
                 {(year !== new Date().getFullYear() && (
                     <span className="text-xl font-semibold">
