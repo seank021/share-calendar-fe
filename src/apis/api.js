@@ -320,7 +320,7 @@ export const acceptRequest = async (friendUid, friendEmail, friendDisplayName) =
         await setDoc(friendDocRef, {
             uid: friendUid,
             email: friendEmail,
-            displayName: friendDisplayName
+            displayName: friendDisplayName,
         });
 
         // 상대방 친구 목록에 추가
@@ -328,7 +328,7 @@ export const acceptRequest = async (friendUid, friendEmail, friendDisplayName) =
         await setDoc(currentUserDocRef, {
             uid: currentUser.uid,
             email: currentUser.email,
-            displayName: currentUser.displayName
+            displayName: currentUser.displayName,
         });
 
         // 요청 resolved로 업데이트
@@ -340,10 +340,10 @@ export const acceptRequest = async (friendUid, friendEmail, friendDisplayName) =
         console.error('친구 요청 수락 실패:', error);
         return false;
     }
-}
+};
 
 // 친구 요청 거절 -> 요청 resolved: true로 업데이트
-export const rejectRequest = async (friendUid) => {
+export const rejectRequest = async friendUid => {
     if (!friendUid) {
         alert('친구 정보가 없습니다.');
         return;
@@ -367,7 +367,7 @@ export const rejectRequest = async (friendUid) => {
         console.error('친구 요청 거절 실패:', error);
         return false;
     }
-}
+};
 
 // 친구 삭제 -> 현재 사용자의 친구 목록에서 friendUid 삭제, 상대방 친구 목록에서 현재 사용자 삭제
 export const deleteFriend = async (friendUid, friendEmail) => {
@@ -398,4 +398,4 @@ export const deleteFriend = async (friendUid, friendEmail) => {
         console.error('친구 삭제 실패:', error);
         return false;
     }
-}
+};

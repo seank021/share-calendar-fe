@@ -30,7 +30,7 @@ const Requests = () => {
         }
     };
 
-    const onClickReject = async (uid) => {
+    const onClickReject = async uid => {
         if (window.confirm('친구 요청을 거절하시겠습니까?')) {
             const result = await rejectRequest(uid);
             if (result) {
@@ -40,7 +40,7 @@ const Requests = () => {
                 alert('친구 요청 거절에 실패했습니다.');
             }
         }
-    }
+    };
 
     return (
         <div className="flex flex-col bg-white h-[calc(100vh-3.5rem)]">
@@ -67,7 +67,9 @@ const Requests = () => {
                                 <p className="text-xs text-gray-400 tracking-tight">
                                     {request.createdAt.toDate().toLocaleDateString()}
                                 </p>
-                                <p className="text-xs tracking-tighter text-gray-400">수락 시 서로의 일정이 공유됩니다.</p>
+                                <p className="text-xs tracking-tighter text-gray-400">
+                                    수락 시 서로의 일정이 공유됩니다.
+                                </p>
                             </div>
 
                             {!request.resolved && (

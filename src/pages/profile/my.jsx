@@ -189,7 +189,10 @@ const My = ({ setIsLoggedIn }) => {
                             value={searchEmail}
                             onChange={e => setSearchEmail(e.target.value)}
                         />
-                        <button className="w-16 h-10 bg-blue-500 text-white rounded-md text-sm" onClick={onClickSearchFriends}>
+                        <button
+                            className="w-16 h-10 bg-blue-500 text-white rounded-md text-sm"
+                            onClick={onClickSearchFriends}
+                        >
                             검색
                         </button>
                     </div>

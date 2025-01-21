@@ -17,7 +17,7 @@ const Friends = () => {
 
         fetchFriends();
     }, []);
-    
+
     const onClickDeleteFriend = async (uid, email) => {
         if (window.confirm('친구를 삭제하시겠습니까?')) {
             const result = await deleteFriend(uid, email);
@@ -28,7 +28,7 @@ const Friends = () => {
                 alert('친구 삭제에 실패했습니다.');
             }
         }
-    }
+    };
 
     return (
         <div className="flex flex-col bg-white h-[calc(100vh-4rem)] w-full">
@@ -52,7 +52,11 @@ const Friends = () => {
                 {friends.map((friend, index) => (
                     <div key={index} className="flex items-center px-2 py-3 border rounded-lg justify-between">
                         <div className="flex items-center gap-4">
-                            <img src={friend.photoURL || '/images/no-profile.png'} alt="profile" className="w-12 h-12 rounded-full" />
+                            <img
+                                src={friend.photoURL || '/images/no-profile.png'}
+                                alt="profile"
+                                className="w-12 h-12 rounded-full"
+                            />
                             <div>
                                 <p className="text-md font-semibold">{friend.displayName}</p>
                                 <p className="text-sm text-gray-400">{friend.email}</p>
