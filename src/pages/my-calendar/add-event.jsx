@@ -16,6 +16,7 @@ const AddEvent = () => {
     const [locationInput, setLocationInput] = useState('');
     const [memo, setMemo] = useState('');
     const [color, setColor] = useState('#4D96FF'); // Default color
+    const [isPrivate, setIsPrivate] = useState(false);
     const [showColorModal, setShowColorModal] = useState(false);
 
     // 컴포넌트가 마운트된 후 제목 input에 포커스
@@ -50,6 +51,7 @@ const AddEvent = () => {
             time: `${startTime} ~ ${endTime}`,
             location: locationInput,
             memo,
+            isPrivate,
         };
 
         try {
@@ -137,6 +139,17 @@ const AddEvent = () => {
                         placeholder="메모를 입력하세요"
                         rows="4"
                     />
+                </div>
+
+                {/* 비공개 여부 */}
+                <div className="flex items-center">
+                    <input
+                        type="checkbox"
+                        checked={isPrivate}
+                        onChange={e => setIsPrivate(e.target.checked)}
+                        className="w-4 h-4 mr-2"
+                    />
+                    <span>친구에게 비공개</span>
                 </div>
             </div>
 

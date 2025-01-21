@@ -30,6 +30,7 @@ const EditEvent = () => {
     const [locationInput, setLocationInput] = useState(selectedEvent?.location || '');
     const [memo, setMemo] = useState(selectedEvent?.memo || '');
     const [color, setColor] = useState(selectedEvent?.color || '#4D96FF');
+    const [isPrivate, setIsPrivate] = useState(selectedEvent?.isPrivate || false);
     const [showColorModal, setShowColorModal] = useState(false);
 
     // 수정된 이벤트 저장
@@ -60,6 +61,7 @@ const EditEvent = () => {
             time: `${startTime} ~ ${endTime}`,
             location: locationInput,
             memo,
+            isPrivate,
         };
 
         try {
@@ -155,6 +157,17 @@ const EditEvent = () => {
                         placeholder="메모를 입력하세요"
                         rows="4"
                     />
+                </div>
+
+                {/* 비공개 여부 */}
+                <div className="flex items-center">
+                    <input
+                        type="checkbox"
+                        checked={isPrivate}
+                        onChange={e => setIsPrivate(e.target.checked)}
+                        className="w-4 h-4 mr-2"
+                    />
+                    <span>친구에게 비공개</span>
                 </div>
             </div>
 
