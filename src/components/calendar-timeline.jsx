@@ -31,7 +31,7 @@ const CalendarTimeline = ({ events }) => {
                     return (
                         <div
                             key={event.id}
-                            className="absolute w-full flex items-center justify-center text-white text-sm px-2 cursor-pointer"
+                            className="absolute w-full flex items-center justify-center text-white text-sm px-2 cursor-pointer rounded-md"
                             style={{
                                 top: `${calculatePosition(startTime)}px`,
                                 height: `${calculateHeight(startTime, endTime)}px`,

@@ -71,6 +71,16 @@ const CalendarComparison = () => {
         return <Loading message="일정을 불러오는 중..." />;
     }
 
+    const renderHourLines = () => {
+        return Array.from({ length: 24 }, (_, idx) => (
+            <div
+                key={idx}
+                className="absolute left-0 right-0 h-[1px] bg-gray-200"
+                style={{ top: `${(idx / 24) * 960}px` }}
+            />
+        ));
+    };
+
     return (
         <div
             className="flex flex-col bg-white h-[calc(100vh-4rem)] w-full"
@@ -88,7 +98,7 @@ const CalendarComparison = () => {
                 <div className="w-6"></div>
             </div>
 
-            <div className="flex flex-row overflow-y-auto justify-center w-full">
+            <div className="flex flex-row overflow-y-auto justify-center w-full relative">
                 {/* 시간대 */}
                 <div className="relative w-auto px-1">
                     <h2 className="text-white text-sm">시간대</h2>
@@ -106,10 +116,13 @@ const CalendarComparison = () => {
                 <div className="relative w-[45%]" style={{ height: '960px' }}>
                     <h2 className="text-center text-sm font-semibold mt-1">내 일정</h2>
                     {myEvents.length > 0 ? (
-                        <CalendarTimeline events={myEvents} />
+                        <div className="relative w-full h-full">
+                            {renderHourLines()} {/* 시간대 라인 */}
+                            <CalendarTimeline events={myEvents} />
+                        </div>
                     ) : (
                         <div className="flex items-center justify-center h-full">
-                            <p className="text-center text-sm text-gray-500">일정이 없습니다.</p>
+                            <p className="text-center text-sm text-gray-500">일정이 없습니다</p>
                         </div>
                     )}
                 </div>
@@ -121,10 +134,13 @@ const CalendarComparison = () => {
                 <div className="relative w-[45%]" style={{ height: '960px' }}>
                     <h2 className="text-center text-sm font-semibold mt-1">{friendDisplayName}의 일정</h2>
                     {friendEvents.length > 0 ? (
-                        <CalendarTimeline events={friendEvents} />
+                        <div className="relative w-full h-full">
+                            {renderHourLines()} {/* 시간대 라인 */}
+                            <CalendarTimeline events={friendEvents} />
+                        </div>
                     ) : (
                         <div className="flex items-center justify-center h-full">
-                            <p className="text-center text-sm text-gray-500">일정이 없습니다.</p>
+                            <p className="text-center text-sm text-gray-500">일정이 없습니다</p>
                         </div>
                     )}
                 </div>
