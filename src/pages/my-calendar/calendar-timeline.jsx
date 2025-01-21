@@ -27,7 +27,9 @@ const CalendarTimelinePage = () => {
                 <button onClick={() => navigate(-1)}>
                     <img src="/icons/chevron-left.svg" alt="뒤로가기" className="w-6 h-6" />
                 </button>
-                <h1 className="text-lg font-bold">나의 {date.split('-')[0]}년 {date.split('-')[1]}월 {date.split('-')[2]}일</h1>
+                <h1 className="text-lg font-bold">
+                    나의 {date.split('-')[0]}년 {date.split('-')[1]}월 {date.split('-')[2]}일
+                </h1>
                 <div className="w-6"></div>
             </div>
 
