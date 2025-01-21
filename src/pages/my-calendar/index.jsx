@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Calendar from '../../components/calendar';
 import EventModal from '../../components/event-modal';
+import Loading from '../loading';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { collection, onSnapshot } from 'firebase/firestore';
 import { app, db } from '../../firebase';
@@ -23,6 +24,8 @@ const MyCalendar = () => {
 
     const [selectedDate, setSelectedDate] = useState(null);
     const [showModal, setShowModal] = useState(false);
+
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const auth = getAuth(app);
@@ -59,6 +62,7 @@ const MyCalendar = () => {
             });
 
             setEvents(sortedEvents);
+            setLoading(false);
         });
 
         return () => unsubscribe(); // 컴포넌트 언마운트 시 리스너 해제
@@ -93,6 +97,10 @@ const MyCalendar = () => {
         }
         setCurrentDate(newDate);
     };
+
+    if (loading) {
+        return <Loading message="일정을 불러오는 중..." />;
+    }
 
     return (
         <div

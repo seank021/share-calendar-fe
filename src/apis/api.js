@@ -1,6 +1,6 @@
 import { addDoc, collection, deleteDoc, doc, updateDoc } from 'firebase/firestore';
 import { app, db } from '../firebase';
-import { getAuth, createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword } from 'firebase/auth';
+import { getAuth, createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
 
 export const signup = async (email, password, password_, nickname) => {
     if (password !== password_) {
@@ -102,3 +102,17 @@ export const deleteEvent = async (event) => {
         }
     }
 }
+
+export const getUserInfo = async () => {
+    const auth = getAuth(app);
+
+    return new Promise((resolve, reject) => {
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                resolve(user);
+            } else {
+                reject(new Error('로그인이 필요합니다'));
+            }
+        });
+    });
+};
