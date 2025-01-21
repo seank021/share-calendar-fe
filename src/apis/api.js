@@ -597,4 +597,4 @@ export const changeImage = async (email, image) => {
         alert('이미지 변경에 실패했습니다.');
         return false;
     }
-}
+};
