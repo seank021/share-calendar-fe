@@ -1,6 +1,12 @@
 import { addDoc, collection, deleteDoc, doc, updateDoc } from 'firebase/firestore';
 import { app, db } from '../firebase';
-import { getAuth, createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
+import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    updateProfile,
+    signInWithEmailAndPassword,
+    onAuthStateChanged,
+} from 'firebase/auth';
 
 export const signup = async (email, password, password_, nickname) => {
     if (password !== password_) {
@@ -39,7 +45,7 @@ export const login = async (email, password) => {
     }
 };
 
-export const addEvent = async (event) => {
+export const addEvent = async event => {
     try {
         const auth = getAuth(app);
         const currentUser = auth.currentUser;
@@ -56,7 +62,7 @@ export const addEvent = async (event) => {
         console.error('이벤트 저장 실패:', error);
         return false;
     }
-}
+};
 
 export const updateEvent = async (selectedEventId, updatedEvent) => {
     try {
@@ -75,9 +81,9 @@ export const updateEvent = async (selectedEventId, updatedEvent) => {
         console.error('이벤트 수정 실패:', error);
         return false;
     }
-}
+};
 
-export const deleteEvent = async (event) => {
+export const deleteEvent = async event => {
     if (!event.id) {
         alert('삭제할 이벤트 ID가 없습니다.');
         return;
@@ -101,13 +107,13 @@ export const deleteEvent = async (event) => {
             return false;
         }
     }
-}
+};
 
 export const getUserInfo = async () => {
     const auth = getAuth(app);
 
     return new Promise((resolve, reject) => {
-        onAuthStateChanged(auth, (user) => {
+        onAuthStateChanged(auth, user => {
             if (user) {
                 resolve(user);
             } else {
