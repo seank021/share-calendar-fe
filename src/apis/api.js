@@ -537,3 +537,40 @@ export const findPassword = async email => {
         return false;
     }
 };
+
+export const getUserEvents = async (email, date, includePrivate) => {
+    const auth = getAuth(app);
+
+    return new Promise(async (resolve, reject) => {
+        onAuthStateChanged(auth, async user => {
+            if (!user) {
+                alert('로그인이 필요합니다.');
+                return reject(new Error('로그인이 필요합니다.'));
+            }
+
+            try {
+                const targetEmail = email === 'my' ? user.email : email;
+                const eventsRef = collection(db, 'users', targetEmail, 'events');
+                const eventsSnapshot = await getDocs(eventsRef);
+
+                if (eventsSnapshot.empty) {
+                    return resolve([]);
+                }
+
+                // date에 해당하는 일정 필터링
+                const events = eventsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                const filteredEvents = events.filter(event => event.date === date);
+
+                // isPrivate이 false인 경우만 필터링
+                if (!includePrivate) {
+                    filteredEvents = filteredEvents.filter(event => !event.isPrivate);
+                }
+
+                resolve(filteredEvents);
+            } catch (error) {
+                console.error('일정 조회 실패:', error);
+                reject(new Error('일정 조회에 실패했습니다.'));
+            }
+        });
+    });
+};

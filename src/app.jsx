@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import '../src/styles/globals.css';
 
@@ -10,6 +10,7 @@ import MyCalendar from './pages/my-calendar';
 import AddEvent from './pages/my-calendar/add-event';
 import EditEvent from './pages/my-calendar/edit-event';
 import ShareCalendar from './pages/share-calendar';
+import CalendarComparison from './pages/share-calendar/calendar-comparison';
 import Profile from './pages/profile';
 import My from './pages/profile/my';
 import Login from './pages/profile/login';
@@ -33,6 +34,7 @@ const App = () => {
                     <Route path="/edit-event" element={<EditEvent />} />
 
                     <Route path="/" element={<ShareCalendar />} />
+                    <Route path="/share-calendar/:friendEmail" element={<CalendarComparison />} />
 
                     <Route path="/profile" element={<Profile />} />
                     <Route path="/my" element={<My setIsLoggedIn={setIsLoggedIn} />} />

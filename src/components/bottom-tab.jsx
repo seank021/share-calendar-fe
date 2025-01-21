@@ -60,7 +60,8 @@ const BottomTab = () => {
                 onClick={() => handleNavigation('/')}
                 style={{
                     textDecoration: 'none',
-                    color: location.pathname === '/' ? '#007BFF' : '#000',
+                    color:
+                        location.pathname === '/' || location.pathname.includes('/share-calendar') ? '#007BFF' : '#000',
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
@@ -69,7 +70,11 @@ const BottomTab = () => {
                 }}
             >
                 <img
-                    src={location.pathname === '/' ? shareCalendarColor : shareCalendar}
+                    src={
+                        location.pathname === '/' || location.pathname.includes('/share-calendar')
+                            ? shareCalendarColor
+                            : shareCalendar
+                    }
                     alt="Share Calendar"
                     style={{ width: '24px', height: '24px' }}
                     className="select-none"
