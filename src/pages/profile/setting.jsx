@@ -6,7 +6,7 @@ const Setting = ({ setIsLoggedIn }) => {
 
     const verifyEmail = () => {
         console.log('이메일 인증');
-    }
+    };
 
     const handleLogout = () => {
         if (window.confirm('로그아웃 하시겠습니까?')) {
@@ -18,7 +18,7 @@ const Setting = ({ setIsLoggedIn }) => {
 
     const handleWithdrawal = () => {
         console.log('회원탈퇴');
-    }
+    };
 
     return (
         <div className="flex flex-col bg-white h-[calc(100vh-4rem)] w-full">
@@ -27,9 +27,7 @@ const Setting = ({ setIsLoggedIn }) => {
                 <button onClick={() => navigate(-1)}>
                     <img src="/icons/chevron-left.svg" alt="뒤로가기" className="w-6 h-6" />
                 </button>
-                <h1 className="text-lg font-bold">
-                    환경설정
-                </h1>
+                <h1 className="text-lg font-bold">환경설정</h1>
                 <div className="w-6"></div>
             </div>
             {/* 이메일 인증 */}
