@@ -574,3 +574,27 @@ export const getUserEvents = async (email, date, includePrivate) => {
         });
     });
 };
+
+// custom api - app.js에서 필요할 때 사용
+export const changeImage = async (email, image) => {
+    try {
+        // Firestore의 users 컬렉션에 사용자 정보 추가
+        const userDocRef = doc(db, 'users', email);
+        await updateDoc(userDocRef, {
+            photoURL: image,
+        });
+
+        // Firebase Authentication 프로필 업데이트
+        const auth = getAuth(app);
+        const currentUser = auth.currentUser;
+        await updateProfile(currentUser, {
+            photoURL: image,
+        });
+
+        return true;
+    } catch (error) {
+        console.error('이미지 변경 실패:', error);
+        alert('이미지 변경에 실패했습니다.');
+        return false;
+    }
+}

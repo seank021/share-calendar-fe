@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import '../src/styles/globals.css';
 
@@ -24,8 +24,14 @@ import ChangePassword from './pages/profile/change-password';
 import FindPassword from './pages/profile/find-password';
 import NotFound from './pages/not-found';
 
+import { changeImage } from './apis/api';
+
 const App = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    // useEffect(() => {
+    //     changeImage("seahn1021@naver.com", "https://avatars.githubusercontent.com/u/127049663?v=4");
+    // }, []);
 
     return (
         <div className="container-col">
