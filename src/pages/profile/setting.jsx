@@ -4,6 +4,10 @@ import { useNavigate } from 'react-router-dom';
 const Setting = ({ setIsLoggedIn }) => {
     const navigate = useNavigate();
 
+    const verifyEmail = () => {
+        console.log('이메일 인증');
+    }
+
     const handleLogout = () => {
         if (window.confirm('로그아웃 하시겠습니까?')) {
             setIsLoggedIn(false);
@@ -11,6 +15,10 @@ const Setting = ({ setIsLoggedIn }) => {
             navigate('/login'); // 로그아웃 후 로그인 페이지로 이동
         }
     };
+
+    const handleWithdrawal = () => {
+        console.log('회원탈퇴');
+    }
 
     return (
         <div className="flex flex-col bg-white h-[calc(100vh-4rem)] w-full">
@@ -24,10 +32,20 @@ const Setting = ({ setIsLoggedIn }) => {
                 </h1>
                 <div className="w-6"></div>
             </div>
+            {/* 이메일 인증 */}
+            <div className="flex items-center justify-between px-4 py-3 border-b" onClick={verifyEmail}>
+                <p className="text-md">이메일 인증</p>
+                <img src="/icons/chevron-right.svg" alt="이메일 인증" className="w-6 h-6" />
+            </div>
             {/* 로그아웃 버튼 */}
             <div className="flex items-center justify-between px-4 py-3 border-b" onClick={handleLogout}>
                 <p className="text-md">로그아웃</p>
                 <img src="/icons/chevron-right.svg" alt="로그아웃" className="w-6 h-6" />
+            </div>
+            {/* 회원탈퇴 */}
+            <div className="flex items-center justify-between px-4 py-3 border-b" onClick={handleWithdrawal}>
+                <p className="text-md">회원탈퇴</p>
+                <img src="/icons/chevron-right.svg" alt="회원탈퇴" className="w-6 h-6" />
             </div>
         </div>
     );
