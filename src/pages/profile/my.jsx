@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getUserInfo, searchUsersByEmail, getTop3Friends, requestForFriend } from '../../apis/api';
+import { getUserInfo, searchUsersByEmail, getTop3Friends, requestForFriend, getUserInfoByEmail } from '../../apis/api';
 import Loading from '../loading';
 import '../../styles/globals.css';
 
@@ -42,8 +42,19 @@ const My = ({ setIsLoggedIn }) => {
     useEffect(() => {
         const fetchFriends = async () => {
             try {
-                const friends = await getTop3Friends();
-                setFriends(friends);
+                const rawFriends = await getTop3Friends();
+
+                const friendsWithNames = await Promise.all(
+                    rawFriends.map(async request => {
+                        const userInfo = await getUserInfoByEmail(request.email);
+                        return {
+                            ...request,
+                            displayName: userInfo?.displayName || '',
+                        };
+                    })
+                );
+
+                setFriends(friendsWithNames);
             } catch (error) {
                 alert(error.message);
             }
@@ -60,9 +71,18 @@ const My = ({ setIsLoggedIn }) => {
             }
 
             setIsSearched(true); // 검색 버튼 클릭 상태 업데이트
-            const users = await searchUsersByEmail(searchEmail);
-            console.log(users);
-            setSearchedFriends(users);
+            const rawUsers = await searchUsersByEmail(searchEmail);
+            const usersWithNames = await Promise.all(
+                rawUsers.map(async user => {
+                    const userInfo = await getUserInfoByEmail(user.email);
+                    return {
+                        ...user,
+                        displayName: userInfo?.displayName || '',
+                    };
+                })
+            );
+
+            setSearchedFriends(usersWithNames);
         } catch (error) {
             alert(error.message);
         }
@@ -210,8 +230,8 @@ const My = ({ setIsLoggedIn }) => {
                                             className="w-[50px] h-[50px] rounded-full"
                                         />
                                         <div className="flex flex-col items-start justify-center">
-                                            <p className="text-gray-500 text-sm text-center">{friend.nickname}</p>
-                                            <p className="text-gray-500 text-sm text-center">{friend.email}</p>
+                                            <p className="text-sm text-center">{friend.displayName}</p>
+                                            <p className="text-sm text-center">{friend.email}</p>
                                         </div>
                                     </div>
                                     <button

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getFriends, deleteFriend } from '../../apis/api';
+import { getFriends, deleteFriend, getUserInfoByEmail } from '../../apis/api';
 
 const Friends = () => {
     const navigate = useNavigate();
@@ -8,8 +8,19 @@ const Friends = () => {
     useEffect(() => {
         const fetchFriends = async () => {
             try {
-                const friends = await getFriends();
-                setFriends(friends);
+                const rawFriends = await getFriends();
+
+                const friendsWithNames = await Promise.all(
+                    rawFriends.map(async request => {
+                        const userInfo = await getUserInfoByEmail(request.email);
+                        return {
+                            ...request,
+                            displayName: userInfo?.displayName || '',
+                        };
+                    })
+                );
+
+                setFriends(friendsWithNames);
             } catch (error) {
                 alert(error.message);
             }

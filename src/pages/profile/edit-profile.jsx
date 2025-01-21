@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { getAuth, onAuthStateChanged, updateProfile } from 'firebase/auth';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { app } from '../../firebase';
 import Loading from '../loading';
+import { updateProfileInfo } from '../../apis/api';
 
 const EditProfile = () => {
     const navigate = useNavigate();
@@ -36,15 +37,15 @@ const EditProfile = () => {
 
     const handleSave = async () => {
         try {
-            await updateProfile(auth.currentUser, {
-                displayName: nickname,
-                photoURL: photoURL,
-            });
-            alert('프로필이 수정되었습니다.');
-            navigate('/my');
+            const result = await updateProfileInfo(photoURL, nickname);
+            if (result) {
+                alert('프로필이 수정되었습니다.');
+                navigate(-1);
+            } else {
+                alert('프로필 수정에 실패했습니다.');
+            }
         } catch (error) {
-            console.error('프로필 수정 실패:', error);
-            alert('프로필 수정에 실패했습니다.');
+            alert(error.message);
         }
     };
 

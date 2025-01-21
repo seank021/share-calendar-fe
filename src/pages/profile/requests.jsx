@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getRequests, acceptRequest, rejectRequest } from '../../apis/api';
+import { getRequests, acceptRequest, rejectRequest, getUserInfoByEmail } from '../../apis/api';
 
 const Requests = () => {
     const navigate = useNavigate();
@@ -8,8 +8,20 @@ const Requests = () => {
     useEffect(() => {
         const fetchRequests = async () => {
             try {
-                const requests = await getRequests();
-                setRequests(requests);
+                const rawRequests = await getRequests();
+
+                const requestsWithNames = await Promise.all(
+                    rawRequests.map(async (request) => {
+                        const userInfo = await getUserInfoByEmail(request.email);
+                        return {
+                            ...request,
+                            displayName: userInfo?.displayName || '',
+                            uid: userInfo?.uid || '',
+                        };
+                    })
+                );
+
+                setRequests(requestsWithNames);
             } catch (error) {
                 alert(error.message);
             }
@@ -18,9 +30,9 @@ const Requests = () => {
         fetchRequests();
     }, []);
 
-    const onClickAccept = async (uid, email, displayName) => {
+    const onClickAccept = async (uid, email) => {
         if (window.confirm('친구 요청을 수락하시겠습니까?')) {
-            const result = await acceptRequest(uid, email, displayName);
+            const result = await acceptRequest(uid, email);
             if (result) {
                 alert('친구 요청을 수락했습니다.');
                 window.location.reload();
@@ -30,9 +42,9 @@ const Requests = () => {
         }
     };
 
-    const onClickReject = async uid => {
+    const onClickReject = async email => {
         if (window.confirm('친구 요청을 거절하시겠습니까?')) {
-            const result = await rejectRequest(uid);
+            const result = await rejectRequest(email);
             if (result) {
                 alert('친구 요청을 거절했습니다.');
                 window.location.reload();
@@ -76,13 +88,13 @@ const Requests = () => {
                                 <div className="flex gap-1 items-center">
                                     <button
                                         className="px-2 py-1 h-8 bg-blue-500 text-white rounded-md text-sm"
-                                        onClick={() => onClickAccept(request.uid, request.email, request.displayName)}
+                                        onClick={() => onClickAccept(request.uid, request.email)}
                                     >
                                         수락
                                     </button>
                                     <button
                                         className="px-2 py-1 h-8 bg-red-500 text-white rounded-md text-sm"
-                                        onClick={() => onClickReject(request.uid)}
+                                        onClick={() => onClickReject(request.email)}
                                     >
                                         거절
                                     </button>

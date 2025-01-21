@@ -1,4 +1,4 @@
-import { addDoc, collection, deleteDoc, doc, setDoc, updateDoc, query, where, getDocs } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, setDoc, updateDoc, query, where, getDocs, getDoc } from 'firebase/firestore';
 import { app, db } from '../firebase';
 import {
     getAuth,
@@ -26,11 +26,11 @@ export const signup = async (email, password, password_, nickname) => {
         await updateProfile(auth.currentUser, { displayName: nickname });
 
         // Firestore의 users 컬렉션에 사용자 정보 추가
-        const userDocRef = doc(db, 'users-by-email', user.email);
+        const userDocRef = doc(db, 'users', user.email);
         await setDoc(userDocRef, {
             uid: user.uid,
             email: user.email,
-            nickname: nickname,
+            displayName: user.displayName,
             photoURL: '',
         });
 
@@ -66,7 +66,7 @@ export const addEvent = async event => {
             return;
         }
 
-        const eventsRef = collection(db, 'users', currentUser.uid, 'events');
+        const eventsRef = collection(db, 'users', currentUser.email, 'events');
         await addDoc(eventsRef, event);
         return true;
     } catch (error) {
@@ -85,7 +85,7 @@ export const updateEvent = async (selectedEventId, updatedEvent) => {
             return;
         }
 
-        const eventDocRef = doc(db, 'users', currentUser.uid, 'events', selectedEventId);
+        const eventDocRef = doc(db, 'users', currentUser.email, 'events', selectedEventId);
         await updateDoc(eventDocRef, updatedEvent);
         return true;
     } catch (error) {
@@ -110,7 +110,7 @@ export const deleteEvent = async event => {
                 return;
             }
 
-            const eventDocRef = doc(db, 'users', currentUser.uid, 'events', event.id);
+            const eventDocRef = doc(db, 'users', currentUser.email, 'events', event.id);
             await deleteDoc(eventDocRef);
             return true;
         } catch (error) {
@@ -163,7 +163,7 @@ export const searchUsersByEmail = async email => {
     }
 
     try {
-        const usersRef = collection(db, 'users-by-email');
+        const usersRef = collection(db, 'users');
 
         // Firestore에서 이메일 검색
         const q = query(usersRef, where('email', '>=', email), where('email', '<=', email + '\uf8ff'));
@@ -195,7 +195,7 @@ export const getFriends = async () => {
             }
 
             try {
-                const friendsRef = collection(db, 'users', user.uid, 'friends');
+                const friendsRef = collection(db, 'users', user.email, 'friends');
                 const friendsSnapshot = await getDocs(friendsRef);
 
                 if (friendsSnapshot.empty) {
@@ -223,7 +223,7 @@ export const getTop3Friends = async () => {
             }
 
             try {
-                const friendsRef = collection(db, 'users', user.uid, 'friends');
+                const friendsRef = collection(db, 'users', user.email, 'friends');
                 const friendsSnapshot = await getDocs(friendsRef);
 
                 if (friendsSnapshot.empty) {
@@ -255,11 +255,9 @@ export const requestForFriend = async (friendEmail, friendUid) => {
             return;
         }
 
-        const friendDocRef = doc(db, 'users', friendUid, 'requests', currentUser.uid);
+        const friendDocRef = doc(db, 'users', friendEmail, 'requests', currentUser.email);
         await setDoc(friendDocRef, {
-            uid: currentUser.uid,
             email: currentUser.email,
-            displayName: currentUser.displayName,
             createdAt: new Date(),
             resolved: false,
         });
@@ -282,7 +280,7 @@ export const getRequests = async () => {
             }
 
             try {
-                const requestsRef = collection(db, 'users', user.uid, 'requests');
+                const requestsRef = collection(db, 'users', user.email, 'requests');
                 const requestsSnapshot = await getDocs(requestsRef);
 
                 if (requestsSnapshot.empty) {
@@ -299,9 +297,9 @@ export const getRequests = async () => {
     });
 };
 
-// 친구 요청 수락 -> friendUid의 친구 목록에 현재 사용자 추가, 현재 사용자의 친구 목록에 friendUid 추가, 요청 resolved: true로 업데이트
-export const acceptRequest = async (friendUid, friendEmail, friendDisplayName) => {
-    if (!friendUid || !friendEmail || !friendDisplayName) {
+// 친구 요청 수락 -> friendEmail의 친구 목록에 현재 사용자 추가, 현재 사용자의 친구 목록에 friendEmail 추가, 요청 resolved: true로 업데이트
+export const acceptRequest = async (friendUid, friendEmail) => {
+    if (!friendUid || !friendEmail) {
         alert('친구 정보가 없습니다.');
         return;
     }
@@ -316,23 +314,21 @@ export const acceptRequest = async (friendUid, friendEmail, friendDisplayName) =
         }
 
         // 친구 목록에 추가
-        const friendDocRef = doc(db, 'users', currentUser.uid, 'friends', friendUid);
+        const friendDocRef = doc(db, 'users', currentUser.email, 'friends', friendEmail);
         await setDoc(friendDocRef, {
             uid: friendUid,
             email: friendEmail,
-            displayName: friendDisplayName,
         });
 
         // 상대방 친구 목록에 추가
-        const currentUserDocRef = doc(db, 'users', friendUid, 'friends', currentUser.uid);
+        const currentUserDocRef = doc(db, 'users', friendEmail, 'friends', currentUser.email);
         await setDoc(currentUserDocRef, {
             uid: currentUser.uid,
             email: currentUser.email,
-            displayName: currentUser.displayName,
         });
 
         // 요청 resolved로 업데이트
-        const requestDocRef = doc(db, 'users', currentUser.uid, 'requests', friendUid);
+        const requestDocRef = doc(db, 'users', currentUser.email, 'requests', friendEmail);
         await updateDoc(requestDocRef, { resolved: true });
 
         return true;
@@ -343,8 +339,8 @@ export const acceptRequest = async (friendUid, friendEmail, friendDisplayName) =
 };
 
 // 친구 요청 거절 -> 요청 resolved: true로 업데이트
-export const rejectRequest = async friendUid => {
-    if (!friendUid) {
+export const rejectRequest = async friendEmail => {
+    if (!friendEmail) {
         alert('친구 정보가 없습니다.');
         return;
     }
@@ -359,7 +355,7 @@ export const rejectRequest = async friendUid => {
         }
 
         // 요청 resolved로 업데이트
-        const requestDocRef = doc(db, 'users', currentUser.uid, 'requests', friendUid);
+        const requestDocRef = doc(db, 'users', currentUser.email, 'requests', friendEmail);
         await updateDoc(requestDocRef, { resolved: true });
 
         return true;
@@ -369,7 +365,7 @@ export const rejectRequest = async friendUid => {
     }
 };
 
-// 친구 삭제 -> 현재 사용자의 친구 목록에서 friendUid 삭제, 상대방 친구 목록에서 현재 사용자 삭제
+// 친구 삭제 -> 현재 사용자의 친구 목록에서 friendEmail 삭제, 상대방 친구 목록에서 현재 사용자 삭제
 export const deleteFriend = async (friendUid, friendEmail) => {
     if (!friendUid || !friendEmail) {
         alert('친구 정보가 없습니다.');
@@ -386,11 +382,11 @@ export const deleteFriend = async (friendUid, friendEmail) => {
         }
 
         // 현재 사용자의 친구 목록에서 삭제
-        const friendDocRef = doc(db, 'users', currentUser.uid, 'friends', friendUid);
+        const friendDocRef = doc(db, 'users', currentUser.email, 'friends', friendEmail);
         await deleteDoc(friendDocRef);
 
         // 상대방 친구 목록에서 삭제
-        const currentUserDocRef = doc(db, 'users', friendUid, 'friends', currentUser.uid);
+        const currentUserDocRef = doc(db, 'users', friendEmail, 'friends', currentUser.email);
         await deleteDoc(currentUserDocRef);
 
         return true;
@@ -399,3 +395,56 @@ export const deleteFriend = async (friendUid, friendEmail) => {
         return false;
     }
 };
+
+export const getUserInfoByEmail = async email => {
+    if (!email) {
+        alert('이메일을 입력해주세요.');
+        return;
+    }
+
+    try {
+        const userDocRef = doc(db, 'users', email);
+        const userDoc = await getDoc(userDocRef);
+
+        if (!userDoc.exists()) {
+            alert('사용자 정보가 없습니다.');
+            return;
+        }
+
+        return userDoc.data();
+    } catch (error) {
+        console.error('사용자 정보 조회 실패:', error);
+        return null;
+    }
+}
+
+// photo, nickname
+export const updateProfileInfo = async (photoURL, nickname) => {
+    try {
+        const auth = getAuth(app);
+        const currentUser = auth.currentUser;
+
+        if (!currentUser) {
+            alert('로그인이 필요합니다.');
+            return;
+        }
+
+        // Firebase Authentication 프로필 업데이트
+        await updateProfile(currentUser, { 
+            displayName: nickname, 
+            photoURL: photoURL
+        });
+
+        // Firestore에서 사용자 문서 업데이트
+        const userDocRef = doc(db, 'users', currentUser.email);
+        await updateDoc(userDocRef, { 
+            displayName: nickname, 
+            photoURL: photoURL 
+        });
+
+        return true;
+    } catch (error) {
+        console.error('프로필 수정 실패:', error);
+        return false;
+    }
+}
