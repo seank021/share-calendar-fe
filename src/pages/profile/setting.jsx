@@ -47,10 +47,10 @@ const Setting = ({ setIsLoggedIn }) => {
                 <img src="/icons/chevron-right.svg" alt="로그아웃" className="w-6 h-6" />
             </div>
             {/* 회원탈퇴 */}
-            <div className="flex items-center justify-between px-4 py-3 border-b" onClick={handleWithdrawal}>
+            {/* <div className="flex items-center justify-between px-4 py-3 border-b" onClick={handleWithdrawal}>
                 <p className="text-md">회원탈퇴</p>
                 <img src="/icons/chevron-right.svg" alt="회원탈퇴" className="w-6 h-6" />
-            </div>
+            </div> */}
         </div>
     );
 };
