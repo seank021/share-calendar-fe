@@ -85,7 +85,7 @@ const My = ({ setIsLoggedIn }) => {
                         />
                     </div>
                 </div>
-                <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-3">
                     {userInfo.photoURL ? (
                         <img src={userInfo.photoURL} alt="profile" className="w-[80px] h-[80px] rounded-full" />
                     ) : (
