@@ -1,4 +1,15 @@
-import { addDoc, collection, deleteDoc, doc, setDoc, updateDoc, query, where, getDocs, getDoc } from 'firebase/firestore';
+import {
+    addDoc,
+    collection,
+    deleteDoc,
+    doc,
+    setDoc,
+    updateDoc,
+    query,
+    where,
+    getDocs,
+    getDoc,
+} from 'firebase/firestore';
 import { app, db } from '../firebase';
 import {
     getAuth,
@@ -430,7 +441,7 @@ export const getUserInfoByEmail = async email => {
         console.error('사용자 정보 조회 실패:', error);
         return null;
     }
-}
+};
 
 // photo, nickname
 export const updateProfileInfo = async (photoURL, nickname) => {
@@ -444,16 +455,16 @@ export const updateProfileInfo = async (photoURL, nickname) => {
         }
 
         // Firebase Authentication 프로필 업데이트
-        await updateProfile(currentUser, { 
-            displayName: nickname, 
-            photoURL: photoURL
+        await updateProfile(currentUser, {
+            displayName: nickname,
+            photoURL: photoURL,
         });
 
         // Firestore에서 사용자 문서 업데이트
         const userDocRef = doc(db, 'users', currentUser.email);
-        await updateDoc(userDocRef, { 
-            displayName: nickname, 
-            photoURL: photoURL 
+        await updateDoc(userDocRef, {
+            displayName: nickname,
+            photoURL: photoURL,
         });
 
         return true;
@@ -462,4 +473,4 @@ export const updateProfileInfo = async (photoURL, nickname) => {
         alert('프로필 수정에 실패했습니다.');
         return false;
     }
-}
+};

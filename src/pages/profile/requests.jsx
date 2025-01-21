@@ -11,7 +11,7 @@ const Requests = () => {
                 const rawRequests = await getRequests();
 
                 const requestsWithNames = await Promise.all(
-                    rawRequests.map(async (request) => {
+                    rawRequests.map(async request => {
                         const userInfo = await getUserInfoByEmail(request.email);
                         return {
                             ...request,
