@@ -20,6 +20,9 @@ const Requests = () => {
                         };
                     })
                 );
+                
+                // 친구 요청을 시간 순서대로 정렬
+                requestsWithNames.sort((a, b) => b.createdAt - a.createdAt);
 
                 setRequests(requestsWithNames);
             } catch (error) {
@@ -69,10 +72,10 @@ const Requests = () => {
                         {/* 알림 내용 */}
                         <div className="flex w-full justify-between">
                             <div className="flex flex-col gap-[0.2rem]">
-                                <p className="text-sm font-bold">
+                                <p className="text-sm font-bold tracking-tighter">
                                     {request.displayName} ({request.email})
                                 </p>
-                                <p className="text-xs text-gray-400 tracking-tight">
+                                <p className="text-xs text-gray-400 tracking-tighter">
                                     {request.createdAt.toDate().toLocaleDateString()}
                                 </p>
                                 <p className="text-xs tracking-tighter text-gray-400">
@@ -81,15 +84,15 @@ const Requests = () => {
                             </div>
 
                             {!request.resolved && (
-                                <div className="flex gap-1 items-center">
+                                <div className="flex flex-col gap-1 items-center">
                                     <button
-                                        className="px-2 py-1 h-8 bg-blue-500 text-white rounded-md text-sm"
+                                        className="px-3 py-1 h-7 bg-blue-500 text-white rounded-md text-sm"
                                         onClick={() => onClickAccept(request.uid, request.email)}
                                     >
                                         수락
                                     </button>
                                     <button
-                                        className="px-2 py-1 h-8 bg-red-500 text-white rounded-md text-sm"
+                                        className="px-3 py-1 h-7 bg-red-500 text-white rounded-md text-sm"
                                         onClick={() => onClickReject(request.email)}
                                     >
                                         거절
