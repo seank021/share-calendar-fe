@@ -1,5 +1,4 @@
-import { useNavigate } from "react-router-dom";
-
+import { useNavigate } from 'react-router-dom';
 
 const Friends = () => {
     const navigate = useNavigate();
@@ -94,8 +93,10 @@ const Friends = () => {
     ];
 
     const deleteFriend = email => {
-        // 친구 삭제 api 필요
-        console.log(email);
+        if (window.confirm('친구를 삭제하시겠습니까?')) {
+            // 친구 삭제 api 필요
+            console.log(email);
+        }
     };
 
     return (
@@ -110,10 +111,11 @@ const Friends = () => {
             </div>
 
             <p className="px-5 mt-4 text-sm text-gray-400">
-                친구가 되면 서로의 일정이 자동으로 공유됩니다.<br />
+                친구가 되면 서로의 일정이 자동으로 공유됩니다.
+                <br />
                 한쪽에서 친구를 삭제하면 일정 공유도 함께 해제돼요.
             </p>
-            
+
             {/* 친구 목록 */}
             <div className="flex flex-col gap-2 p-4 overflow-y-auto">
                 {FRIENDS.map((friend, index) => (

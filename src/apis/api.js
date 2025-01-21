@@ -1,4 +1,4 @@
-import { addDoc, collection, deleteDoc, doc, updateDoc } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, setDoc, updateDoc, query, where, getDocs } from 'firebase/firestore';
 import { app, db } from '../firebase';
 import {
     getAuth,
@@ -24,6 +24,16 @@ export const signup = async (email, password, password_, nickname) => {
         const auth = getAuth(app);
         const { user } = await createUserWithEmailAndPassword(auth, email, password);
         await updateProfile(auth.currentUser, { displayName: nickname });
+
+        // Firestore의 users 컬렉션에 사용자 정보 추가
+        const userDocRef = doc(db, 'users-by-email', user.email);
+        await setDoc(userDocRef, {
+            uid: user.uid,
+            email: user.email,
+            nickname: nickname,
+            photoURL: '',
+        });
+
         return user;
     } catch (error) {
         if (error.code === 'auth/email-already-in-use') {
@@ -144,5 +154,32 @@ export const verifyEmail = async () => {
     } catch (error) {
         console.error('이메일 인증 요청 실패:', error);
         alert('이메일 인증 요청에 실패했습니다.');
+    }
+};
+
+export const searchUsersByEmail = async email => {
+    if (!email) {
+        throw new Error('이메일을 입력해주세요.');
+    }
+
+    try {
+        const usersRef = collection(db, 'users-by-email');
+
+        // Firestore에서 이메일 검색
+        const q = query(usersRef, where('email', '>=', email), where('email', '<=', email + '\uf8ff'));
+        const querySnapshot = await getDocs(q);
+
+        if (querySnapshot.empty) {
+            return [];
+        }
+
+        // 검색된 사용자 중 현재 사용자 제외
+        const auth = getAuth(app);
+        const currentUser = auth.currentUser;
+        const users = querySnapshot.docs.map(doc => doc.data()).filter(user => user.email !== currentUser.email);
+
+        return users;
+    } catch (error) {
+        throw new Error('사용자 검색에 실패했습니다.');
     }
 };
