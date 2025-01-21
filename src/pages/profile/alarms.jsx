@@ -92,9 +92,9 @@ const Alarms = () => {
                         <div className="flex flex-col gap-[0.2rem] w-full">
                             <div className="flex w-full  items-center justify-between">
                                 <p className="text-sm font-bold">{alarm.title}</p>
-                                <p className="text-xs text-gray-400">{alarm.createdAt.slice(0, 10)}</p>
+                                <p className="text-xs text-gray-400 tracking-tight">{alarm.createdAt.slice(0, 10)}</p>
                             </div>
-                            <p className="text-xs">{alarm.contents}</p>
+                            <p className="text-xs tracking-tighter">{alarm.contents}</p>
                         </div>
                     </div>
                 ))}
