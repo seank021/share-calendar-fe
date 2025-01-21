@@ -32,7 +32,8 @@ const BottomTab = () => {
                     color:
                         location.pathname === '/my-calendar' ||
                         location.pathname === '/add-event' ||
-                        location.pathname === '/edit-event'
+                        location.pathname === '/edit-event' ||
+                        location.pathname.includes('/calendar-timeline')
                             ? '#007BFF'
                             : '#000',
                     display: 'flex',
@@ -46,7 +47,8 @@ const BottomTab = () => {
                     src={
                         location.pathname === '/my-calendar' ||
                         location.pathname === '/add-event' ||
-                        location.pathname === '/edit-event'
+                        location.pathname === '/edit-event' ||
+                        location.pathname.includes('/calendar-timeline')
                             ? calendarColor
                             : calendar
                     }

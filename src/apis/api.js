@@ -558,15 +558,15 @@ export const getUserEvents = async (email, date, includePrivate) => {
                 }
 
                 // date에 해당하는 일정 필터링
-                const events = eventsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                const filteredEvents = events.filter(event => event.date === date);
+                let events = eventsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                events = events.filter(event => event.date === date);
 
                 // isPrivate이 false인 경우만 필터링
                 if (!includePrivate) {
-                    filteredEvents = filteredEvents.filter(event => !event.isPrivate);
+                    events = events.filter(event => !event.isPrivate);
                 }
 
-                resolve(filteredEvents);
+                resolve(events);
             } catch (error) {
                 console.error('일정 조회 실패:', error);
                 reject(new Error('일정 조회에 실패했습니다.'));

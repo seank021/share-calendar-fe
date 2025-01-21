@@ -9,6 +9,7 @@ import BottomTab from './components/bottom-tab';
 import MyCalendar from './pages/my-calendar';
 import AddEvent from './pages/my-calendar/add-event';
 import EditEvent from './pages/my-calendar/edit-event';
+import CalenderTimelinePage from './pages/my-calendar/calendar-timeline';
 import ShareCalendar from './pages/share-calendar';
 import CalendarComparison from './pages/share-calendar/calendar-comparison';
 import Profile from './pages/profile';
@@ -33,6 +34,7 @@ const App = () => {
                     <Route path="/my-calendar" element={<MyCalendar />} />
                     <Route path="/add-event" element={<AddEvent />} />
                     <Route path="/edit-event" element={<EditEvent />} />
+                    <Route path="/calendar-timeline/:date" element={<CalenderTimelinePage />} />
 
                     <Route path="/" element={<ShareCalendar />} />
                     <Route path="/share-calendar/:friendEmail" element={<CalendarComparison />} />

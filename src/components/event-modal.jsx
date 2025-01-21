@@ -29,6 +29,10 @@ const EventModal = ({ date, events, onClose, onAddEvent }) => {
         }
     };
 
+    const handleViewTimeline = () => {
+        navigate(`/calendar-timeline/${date}`, { state: { events } });
+    };
+
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50" onClick={onClose}>
             <div
@@ -36,11 +40,19 @@ const EventModal = ({ date, events, onClose, onAddEvent }) => {
                 onClick={e => e.stopPropagation()}
                 onContextMenu={e => e.preventDefault()} // 꾹 눌렀을 때 기본 메뉴 방지
             >
-                <div className="text-left ml-3 pb-2 border-b-[1px] border-gray-200 mb-4">
-                    <h2 className="text-xl font-bold">
-                        {parsedDate.getMonth() + 1}월 {parsedDate.getDate()}일 {dayOfWeek}요일
-                    </h2>
+                {/* 모달 헤더 */}
+                <div className="flex justify-between items-center pb-2 border-b-[1px] border-gray-200 mb-4">
+                    <div className="text-left ml-3">
+                        <h2 className="text-xl font-bold">
+                            {parsedDate.getMonth() + 1}월 {parsedDate.getDate()}일 {dayOfWeek}요일
+                        </h2>
+                    </div>
+                    <button onClick={handleViewTimeline} aria-label="View Timeline">
+                        <img src="/icons/list.svg" alt="List View" className="w-6 h-6" />
+                    </button>
                 </div>
+
+                {/* 일정 목록 */}
                 <div className="space-y-5 overflow-y-auto px-3 py-2" style={{ maxHeight: '300px' }}>
                     {events.map((event, idx) => (
                         <div
@@ -85,6 +97,8 @@ const EventModal = ({ date, events, onClose, onAddEvent }) => {
                         </div>
                     ))}
                 </div>
+
+                {/* 일정 추가 버튼 */}
                 <button
                     className="mt-4 w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600"
                     onClick={onAddEvent}

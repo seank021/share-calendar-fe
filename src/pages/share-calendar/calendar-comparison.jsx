@@ -27,11 +27,11 @@ const CalendarComparison = () => {
                 const formattedDate = `${selectedYear}-${String(selectedMonth)}-${String(selectedDay)}`;
 
                 // 내 일정 가져오기
-                const myData = await getUserEvents('my', formattedDate, true);
+                const myData = await getUserEvents('my', formattedDate, false);
                 setMyEvents(myData);
 
                 // 친구 일정 가져오기
-                const friendData = await getUserEvents(friendEmail, formattedDate, true);
+                const friendData = await getUserEvents(friendEmail, formattedDate, false);
                 setFriendEvents(friendData);
 
                 setLoading(false);
