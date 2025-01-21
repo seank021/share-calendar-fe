@@ -157,6 +157,11 @@ const My = ({ setIsLoggedIn }) => {
                                 <img src="/icons/check-green.svg" alt="verified" className="w-[20px] h-[20px]" />
                             )}
                         </div>
+                        {!userInfo.emailVerified &&
+                            <p className="text-red-500 text-xs mt-1">
+                                이메일 인증을 해주세요!
+                            </p>
+                        }
                     </div>
                 </div>
 
