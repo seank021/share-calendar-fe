@@ -35,11 +35,6 @@ const My = ({ setIsLoggedIn }) => {
         fetchUserInfo();
     }, [setIsLoggedIn]);
 
-    const onClickLogout = () => {
-        setIsLoggedIn(false);
-        localStorage.removeItem('accessToken');
-    };
-
     const changeGMTtoLocal = gmt => {
         const date = new Date(gmt);
         return date.toLocaleString();
@@ -54,7 +49,7 @@ const My = ({ setIsLoggedIn }) => {
     };
 
     const FRIENDS = [
-        // 상위 3명만 보여주기
+        // 상위 3명만 가져오는 api 필요
         {
             displayName: '세안',
             email: 'aaaaa@naver.com',
@@ -72,36 +67,7 @@ const My = ({ setIsLoggedIn }) => {
         },
     ];
 
-    const ALARMS = [
-        {
-            title: '세안 님이 친구가 되었어요!',
-            contents: '이제 세안 님과 일정이 공유됩니다.',
-            createdAt: '2021-10-01T12:00:00.000Z',
-        },
-        {
-            title: '세안2 님이 친구가 되었어요!',
-            contents: '이제 세안 님과 일정이 공유됩니다.',
-            createdAt: '2021-10-04T12:00:00.000Z',
-        },
-        {
-            title: '세안3 님이 친구가 되었어요!',
-            contents: '이제 세안 님과 일정이 공유됩니다.',
-            createdAt: '2021-10-05T12:00:00.000Z',
-        },
-        {
-            title: '세안4 님이 친구가 되었어요!',
-            contents: '이제 세안 님과 일정이 공유됩니다.',
-            createdAt: '2021-10-06T12:00:00.000Z',
-        },
-        {
-            title: '세안5 님이 친구가 되었어요!',
-            contents: '이제 세안 님과 일정이 공유됩니다.',
-            createdAt: '2021-10-07T12:00:00.000Z',
-        },
-    ];
-
     const onClickLogo = () => {
-        // / 으로 이동
         navigate('/');
     };
 
@@ -186,8 +152,6 @@ const My = ({ setIsLoggedIn }) => {
                         )}
                     </div>
                 </div>
-
-                <button onClick={onClickLogout}>Logout</button>
             </div>
         )
     );

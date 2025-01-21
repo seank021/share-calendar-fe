@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import '../src/styles/globals.css';
 
@@ -10,6 +11,7 @@ import AddEvent from './pages/my-calendar/add-event';
 import EditEvent from './pages/my-calendar/edit-event';
 import ShareCalendar from './pages/share-calendar';
 import Profile from './pages/profile';
+import My from './pages/profile/my';
 import Login from './pages/profile/login';
 import Signup from './pages/profile/signup';
 import EditProfile from './pages/profile/edit-profile';
@@ -18,6 +20,8 @@ import Setting from './pages/profile/setting';
 import Friends from './pages/profile/friends';
 
 const App = () => {
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
     return (
         <div className="container-col">
             <BrowserRouter>
@@ -29,11 +33,12 @@ const App = () => {
                     <Route path="/" element={<ShareCalendar />} />
 
                     <Route path="/profile" element={<Profile />} />
+                    <Route path="/my" element={<My setIsLoggedIn={setIsLoggedIn} />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/signup" element={<Signup />} />
                     <Route path="/edit-profile" element={<EditProfile />} />
                     <Route path="/alarms" element={<Alarms />} />
-                    <Route path="/setting" element={<Setting />} />
+                    <Route path="/setting" element={<Setting setIsLoggedIn={setIsLoggedIn} />} />
                     <Route path="/friends" element={<Friends />} />
 
                     <Route path="*" element={<div>404 Not Found</div>} />
