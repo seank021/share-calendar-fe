@@ -15,14 +15,6 @@ const My = ({ setIsLoggedIn }) => {
             try {
                 const user = await getUserInfo();
                 console.log('user:', user);
-                /*
-                displayName (닉네임)
-                email (이메일)
-                emailVerified (이메일 인증 여부)
-                metadata-creationTime (가입일 GMT)
-                metadata-lastSignInTime (마지막 로그인 시간 GMT)
-                photoURL (프로필 사진)
-                */
                 setUserInfo(user);
             } catch (error) {
                 alert(error.message);
@@ -34,11 +26,6 @@ const My = ({ setIsLoggedIn }) => {
 
         fetchUserInfo();
     }, [setIsLoggedIn]);
-
-    const changeGMTtoLocal = gmt => {
-        const date = new Date(gmt);
-        return date.toLocaleString();
-    };
 
     const onClickSetting = () => {
         navigate('/setting');
