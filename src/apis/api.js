@@ -7,6 +7,11 @@ export const signup = async (email, password, password_, nickname) => {
         return;
     }
 
+    if (!email || !password || !nickname) {
+        alert('모든 항목을 입력해주세요.');
+        return;
+    }
+
     try {
         const auth = getAuth(app);
         const { user } = await createUserWithEmailAndPassword(auth, email, password);
