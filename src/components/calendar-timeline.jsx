@@ -1,4 +1,9 @@
+import React, { useState } from 'react';
+import EventDetailModal from './modal';
+
 const CalendarTimeline = ({ events }) => {
+    const [selectedEvent, setSelectedEvent] = useState(null); // State to hold selected event
+
     const totalHeight = 960; // 960px for 24 hours
     const hourHeight = totalHeight / 24; // Each hour occupies an equal portion of the timeline
 
@@ -18,25 +23,31 @@ const CalendarTimeline = ({ events }) => {
     };
 
     return (
-        <div className="relative w-full" style={{ height: `${totalHeight}px` }}>
-            {events.map(event => {
-                const [startTime, endTime] = event.time.split(' ~ ');
+        <>
+            <div className="relative w-full" style={{ height: `${totalHeight}px` }}>
+                {events.map(event => {
+                    const [startTime, endTime] = event.time.split(' ~ ');
 
-                return (
-                    <div
-                        key={event.id}
-                        className="absolute w-full flex items-center justify-center text-white text-sm px-2"
-                        style={{
-                            top: `${calculatePosition(startTime)}px`,
-                            height: `${calculateHeight(startTime, endTime)}px`,
-                            backgroundColor: event.color,
-                        }}
-                    >
-                        <h3 className="font-semibold text-center">{event.title}</h3>
-                    </div>
-                );
-            })}
-        </div>
+                    return (
+                        <div
+                            key={event.id}
+                            className="absolute w-full flex items-center justify-center text-white text-sm px-2 cursor-pointer"
+                            style={{
+                                top: `${calculatePosition(startTime)}px`,
+                                height: `${calculateHeight(startTime, endTime)}px`,
+                                backgroundColor: event.color,
+                            }}
+                            onClick={() => setSelectedEvent(event)} // Open modal with selected event
+                        >
+                            <h3 className="font-semibold text-center">{event.title}</h3>
+                        </div>
+                    );
+                })}
+            </div>
+
+            {/* 일정 상세 모달 */}
+            {selectedEvent && <EventDetailModal event={selectedEvent} onClose={() => setSelectedEvent(null)} />}
+        </>
     );
 };
 
