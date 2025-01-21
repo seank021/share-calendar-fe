@@ -4,7 +4,7 @@ import { verifyEmail } from '../../apis/api';
 
 const Setting = ({ setIsLoggedIn }) => {
     const navigate = useNavigate();
-    
+
     const handleLogout = () => {
         if (window.confirm('로그아웃 하시겠습니까?')) {
             setIsLoggedIn(false);
