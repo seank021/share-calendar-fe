@@ -14,7 +14,7 @@ const EditProfile = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
+        const unsubscribe = onAuthStateChanged(auth, user => {
             if (user) {
                 setNickname(user.displayName || '');
                 setPhotoURL(user.photoURL || '');
