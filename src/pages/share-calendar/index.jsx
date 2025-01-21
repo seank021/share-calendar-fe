@@ -42,8 +42,8 @@ const ShareCalendar = () => {
         fetchFriends();
     }, []);
 
-    const handleFriendClick = friendEmail => {
-        navigate(`/share-calendar/${friendEmail}`);
+    const handleFriendClick = (friendEmail, friendDisplayName) => {
+        navigate(`/share-calendar/${friendEmail}`, { state: { friendDisplayName } });
     };
 
     if (loading) {
@@ -51,7 +51,6 @@ const ShareCalendar = () => {
     }
 
     return (
-        /* displayName, email, uid */
         <div className="flex flex-col bg-white h-[calc(100vh-4rem)] w-full">
             {/* 상단 헤더 */}
             <div className="flex items-center justify-center px-4 py-3 border-b">
@@ -60,7 +59,7 @@ const ShareCalendar = () => {
 
             <div className="flex flex-col gap-3 p-4 overflow-y-auto">
                 {friends.map((friend, index) => (
-                    <div key={index} className="flex items-center px-2 py-3 border rounded-lg justify-between shadow-sm" onClick={() => handleFriendClick(friend.email)}>
+                    <div key={index} className="flex items-center px-2 py-3 border rounded-lg justify-between shadow-sm" onClick={() => handleFriendClick(friend.email, friend.displayName)}>
                         <div className="flex items-center gap-4">
                             <img
                                 src={friend.photoURL || '/images/no-profile.png'}
