@@ -88,7 +88,7 @@ const BottomTab = () => {
                         location.pathname === '/friends' ||
                         location.pathname === '/setting' ||
                         location.pathname === '/my' ||
-                        location.pathname === '/alarms'
+                        location.pathname === '/requests'
                             ? '#007BFF'
                             : '#000',
                     display: 'flex',
@@ -107,7 +107,7 @@ const BottomTab = () => {
                         location.pathname === '/friends' ||
                         location.pathname === '/setting' ||
                         location.pathname === '/my' ||
-                        location.pathname === '/alarms'
+                        location.pathname === '/requests'
                             ? profileColor
                             : profile
                     }

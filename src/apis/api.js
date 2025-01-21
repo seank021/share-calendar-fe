@@ -183,3 +183,219 @@ export const searchUsersByEmail = async email => {
         throw new Error('사용자 검색에 실패했습니다.');
     }
 };
+
+export const getFriends = async () => {
+    const auth = getAuth(app);
+
+    return new Promise((resolve, reject) => {
+        onAuthStateChanged(auth, async user => {
+            if (!user) {
+                alert('로그인이 필요합니다.');
+                return reject(new Error('로그인이 필요합니다.'));
+            }
+
+            try {
+                const friendsRef = collection(db, 'users', user.uid, 'friends');
+                const friendsSnapshot = await getDocs(friendsRef);
+
+                if (friendsSnapshot.empty) {
+                    return resolve([]);
+                }
+
+                const friends = friendsSnapshot.docs.map(doc => doc.data());
+                resolve(friends);
+            } catch (error) {
+                console.error('친구 목록 조회 실패:', error);
+                reject(new Error('친구 목록 조회 실패'));
+            }
+        });
+    });
+};
+
+export const getTop3Friends = async () => {
+    const auth = getAuth(app);
+
+    return new Promise((resolve, reject) => {
+        onAuthStateChanged(auth, async user => {
+            if (!user) {
+                alert('로그인이 필요합니다.');
+                return reject(new Error('로그인이 필요합니다.'));
+            }
+
+            try {
+                const friendsRef = collection(db, 'users', user.uid, 'friends');
+                const friendsSnapshot = await getDocs(friendsRef);
+
+                if (friendsSnapshot.empty) {
+                    return resolve([]);
+                }
+
+                const friends = friendsSnapshot.docs.map(doc => doc.data()).slice(0, 3);
+                resolve(friends);
+            } catch (error) {
+                console.error('친구 목록 조회 실패:', error);
+                reject(new Error('친구 목록 조회 실패'));
+            }
+        });
+    });
+};
+
+export const requestForFriend = async (friendEmail, friendUid) => {
+    if (!friendEmail || !friendUid) {
+        alert('친구 정보가 없습니다.');
+        return;
+    }
+
+    try {
+        const auth = getAuth(app);
+        const currentUser = auth.currentUser;
+
+        if (!currentUser) {
+            alert('로그인이 필요합니다.');
+            return;
+        }
+
+        const friendDocRef = doc(db, 'users', friendUid, 'requests', currentUser.uid);
+        await setDoc(friendDocRef, {
+            uid: currentUser.uid,
+            email: currentUser.email,
+            displayName: currentUser.displayName,
+            createdAt: new Date(),
+            resolved: false,
+        });
+
+        return true;
+    } catch (error) {
+        console.error('친구 요청 실패:', error);
+        return false;
+    }
+};
+
+export const getRequests = async () => {
+    const auth = getAuth(app);
+
+    return new Promise((resolve, reject) => {
+        onAuthStateChanged(auth, async user => {
+            if (!user) {
+                alert('로그인이 필요합니다.');
+                return reject(new Error('로그인이 필요합니다.'));
+            }
+
+            try {
+                const requestsRef = collection(db, 'users', user.uid, 'requests');
+                const requestsSnapshot = await getDocs(requestsRef);
+
+                if (requestsSnapshot.empty) {
+                    return resolve([]);
+                }
+
+                const requests = requestsSnapshot.docs.map(doc => doc.data());
+                resolve(requests);
+            } catch (error) {
+                console.error('친구 요청 조회 실패:', error);
+                reject(new Error('친구 요청 조회 실패'));
+            }
+        });
+    });
+};
+
+// 친구 요청 수락 -> friendUid의 친구 목록에 현재 사용자 추가, 현재 사용자의 친구 목록에 friendUid 추가, 요청 resolved: true로 업데이트
+export const acceptRequest = async (friendUid, friendEmail, friendDisplayName) => {
+    if (!friendUid || !friendEmail || !friendDisplayName) {
+        alert('친구 정보가 없습니다.');
+        return;
+    }
+
+    try {
+        const auth = getAuth(app);
+        const currentUser = auth.currentUser;
+
+        if (!currentUser) {
+            alert('로그인이 필요합니다.');
+            return;
+        }
+
+        // 친구 목록에 추가
+        const friendDocRef = doc(db, 'users', currentUser.uid, 'friends', friendUid);
+        await setDoc(friendDocRef, {
+            uid: friendUid,
+            email: friendEmail,
+            displayName: friendDisplayName
+        });
+
+        // 상대방 친구 목록에 추가
+        const currentUserDocRef = doc(db, 'users', friendUid, 'friends', currentUser.uid);
+        await setDoc(currentUserDocRef, {
+            uid: currentUser.uid,
+            email: currentUser.email,
+            displayName: currentUser.displayName
+        });
+
+        // 요청 resolved로 업데이트
+        const requestDocRef = doc(db, 'users', currentUser.uid, 'requests', friendUid);
+        await updateDoc(requestDocRef, { resolved: true });
+
+        return true;
+    } catch (error) {
+        console.error('친구 요청 수락 실패:', error);
+        return false;
+    }
+}
+
+// 친구 요청 거절 -> 요청 resolved: true로 업데이트
+export const rejectRequest = async (friendUid) => {
+    if (!friendUid) {
+        alert('친구 정보가 없습니다.');
+        return;
+    }
+
+    try {
+        const auth = getAuth(app);
+        const currentUser = auth.currentUser;
+
+        if (!currentUser) {
+            alert('로그인이 필요합니다.');
+            return;
+        }
+
+        // 요청 resolved로 업데이트
+        const requestDocRef = doc(db, 'users', currentUser.uid, 'requests', friendUid);
+        await updateDoc(requestDocRef, { resolved: true });
+
+        return true;
+    } catch (error) {
+        console.error('친구 요청 거절 실패:', error);
+        return false;
+    }
+}
+
+// 친구 삭제 -> 현재 사용자의 친구 목록에서 friendUid 삭제, 상대방 친구 목록에서 현재 사용자 삭제
+export const deleteFriend = async (friendUid, friendEmail) => {
+    if (!friendUid || !friendEmail) {
+        alert('친구 정보가 없습니다.');
+        return;
+    }
+
+    try {
+        const auth = getAuth(app);
+        const currentUser = auth.currentUser;
+
+        if (!currentUser) {
+            alert('로그인이 필요합니다.');
+            return;
+        }
+
+        // 현재 사용자의 친구 목록에서 삭제
+        const friendDocRef = doc(db, 'users', currentUser.uid, 'friends', friendUid);
+        await deleteDoc(friendDocRef);
+
+        // 상대방 친구 목록에서 삭제
+        const currentUserDocRef = doc(db, 'users', friendUid, 'friends', currentUser.uid);
+        await deleteDoc(currentUserDocRef);
+
+        return true;
+    } catch (error) {
+        console.error('친구 삭제 실패:', error);
+        return false;
+    }
+}

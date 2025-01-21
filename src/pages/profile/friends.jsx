@@ -1,103 +1,34 @@
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { getFriends, deleteFriend } from '../../apis/api';
 
 const Friends = () => {
     const navigate = useNavigate();
+    const [friends, setFriends] = useState([]);
+    useEffect(() => {
+        const fetchFriends = async () => {
+            try {
+                const friends = await getFriends();
+                setFriends(friends);
+            } catch (error) {
+                alert(error.message);
+            }
+        };
 
-    const FRIENDS = [
-        // 친구 다 가져오는 api 필요
-        {
-            displayName: '세안',
-            email: 'aaaaa@naver.com',
-            photoURL: 'https://avatars.githubusercontent.com/u/77464076?v=4',
-        },
-        {
-            displayName: '세안2',
-            email: 'bbbbb@google.com',
-            photoURL: 'https://avatars.githubusercontent.com/u/77464076?v=4',
-        },
-        {
-            displayName: '세안3',
-            email: 'ccccc@naver.com',
-            photoURL: 'https://avatars.githubusercontent.com/u/77464076?v=4',
-        },
-        {
-            displayName: '세안4',
-            email: 'ddddd@naver.com',
-            photoURL: 'https://avatars.githubusercontent.com/u/77464076?v=4',
-        },
-        {
-            displayName: '세안5',
-            email: 'eeeee@naver.com',
-            photoURL: 'https://avatars.githubusercontent.com/u/77464076?v=4',
-        },
-        {
-            displayName: '세안2',
-            email: 'bbbbb@google.com',
-            photoURL: 'https://avatars.githubusercontent.com/u/77464076?v=4',
-        },
-        {
-            displayName: '세안3',
-            email: 'ccccc@naver.com',
-            photoURL: 'https://avatars.githubusercontent.com/u/77464076?v=4',
-        },
-        {
-            displayName: '세안4',
-            email: 'ddddd@naver.com',
-            photoURL: 'https://avatars.githubusercontent.com/u/77464076?v=4',
-        },
-        {
-            displayName: '세안5',
-            email: 'eeeee@naver.com',
-            photoURL: 'https://avatars.githubusercontent.com/u/77464076?v=4',
-        },
-        {
-            displayName: '세안2',
-            email: 'bbbbb@google.com',
-            photoURL: 'https://avatars.githubusercontent.com/u/77464076?v=4',
-        },
-        {
-            displayName: '세안3',
-            email: 'ccccc@naver.com',
-            photoURL: 'https://avatars.githubusercontent.com/u/77464076?v=4',
-        },
-        {
-            displayName: '세안4',
-            email: 'ddddd@naver.com',
-            photoURL: 'https://avatars.githubusercontent.com/u/77464076?v=4',
-        },
-        {
-            displayName: '세안5',
-            email: 'eeeee@naver.com',
-            photoURL: 'https://avatars.githubusercontent.com/u/77464076?v=4',
-        },
-        {
-            displayName: '세안2',
-            email: 'bbbbb@google.com',
-            photoURL: 'https://avatars.githubusercontent.com/u/77464076?v=4',
-        },
-        {
-            displayName: '세안3',
-            email: 'ccccc@naver.com',
-            photoURL: 'https://avatars.githubusercontent.com/u/77464076?v=4',
-        },
-        {
-            displayName: '세안4',
-            email: 'ddddd@naver.com',
-            photoURL: 'https://avatars.githubusercontent.com/u/77464076?v=4',
-        },
-        {
-            displayName: '세안5',
-            email: 'eeeee@naver.com',
-            photoURL: 'https://avatars.githubusercontent.com/u/77464076?v=4',
-        },
-    ];
-
-    const deleteFriend = email => {
+        fetchFriends();
+    }, []);
+    
+    const onClickDeleteFriend = async (uid, email) => {
         if (window.confirm('친구를 삭제하시겠습니까?')) {
-            // 친구 삭제 api 필요
-            console.log(email);
+            const result = await deleteFriend(uid, email);
+            if (result) {
+                alert('친구를 삭제했습니다.');
+                window.location.reload();
+            } else {
+                alert('친구 삭제에 실패했습니다.');
+            }
         }
-    };
+    }
 
     return (
         <div className="flex flex-col bg-white h-[calc(100vh-4rem)] w-full">
@@ -118,18 +49,18 @@ const Friends = () => {
 
             {/* 친구 목록 */}
             <div className="flex flex-col gap-2 p-4 overflow-y-auto">
-                {FRIENDS.map((friend, index) => (
-                    <div key={index} className="flex items-center px-4 py-3 border rounded-lg justify-between">
+                {friends.map((friend, index) => (
+                    <div key={index} className="flex items-center px-2 py-3 border rounded-lg justify-between">
                         <div className="flex items-center gap-4">
-                            <img src={friend.photoURL} alt="profile" className="w-10 h-10 rounded-full" />
+                            <img src={friend.photoURL || '/images/no-profile.png'} alt="profile" className="w-12 h-12 rounded-full" />
                             <div>
                                 <p className="text-md font-semibold">{friend.displayName}</p>
                                 <p className="text-sm text-gray-400">{friend.email}</p>
                             </div>
                         </div>
                         <button
-                            className="text-sm font-bold text-red-500 justify-self-end"
-                            onClick={() => deleteFriend(friend.email)}
+                            className="text-sm font-bold text-red-500 mr-1"
+                            onClick={() => onClickDeleteFriend(friend.uid, friend.email)}
                         >
                             삭제
                         </button>

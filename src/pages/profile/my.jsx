@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { getUserInfo, searchUsersByEmail } from '../../apis/api';
+import { useNavigate } from 'react-router-dom';
+import { getUserInfo, searchUsersByEmail, getTop3Friends, requestForFriend } from '../../apis/api';
 import Loading from '../loading';
 import '../../styles/globals.css';
-import { useNavigate } from 'react-router-dom';
 
 const My = ({ setIsLoggedIn }) => {
     const navigate = useNavigate();
@@ -38,24 +38,19 @@ const My = ({ setIsLoggedIn }) => {
         navigate('/edit-profile');
     };
 
-    const FRIENDS = [
-        // 상위 3명만 가져오는 api 필요
-        {
-            displayName: '세안',
-            email: 'aaaaa@naver.com',
-            photoURL: 'https://avatars.githubusercontent.com/u/77464076?v=4',
-        },
-        {
-            displayName: '세안2',
-            email: 'bbbbb@google.com',
-            photoURL: 'https://avatars.githubusercontent.com/u/77464076?v=4',
-        },
-        {
-            displayName: '세안3',
-            email: 'ccccc@naver.com',
-            photoURL: 'https://avatars.githubusercontent.com/u/77464076?v=4',
-        },
-    ];
+    const [friends, setFriends] = useState([]);
+    useEffect(() => {
+        const fetchFriends = async () => {
+            try {
+                const friends = await getTop3Friends();
+                setFriends(friends);
+            } catch (error) {
+                alert(error.message);
+            }
+        };
+
+        fetchFriends();
+    }, []);
 
     const onClickSearchFriends = async () => {
         try {
@@ -77,8 +72,8 @@ const My = ({ setIsLoggedIn }) => {
         navigate('/');
     };
 
-    const onClickAlarm = () => {
-        navigate('/alarms');
+    const onClickRequests = () => {
+        navigate('/requests');
     };
 
     const onClickMoreFriends = () => {
@@ -87,9 +82,12 @@ const My = ({ setIsLoggedIn }) => {
 
     const onClickAddFriend = async (email, uid) => {
         if (window.confirm('친구 요청을 보내시겠습니까?')) {
-            console.log('내 정보', userInfo.email, userInfo.uid);
-            // 친구 추가 api 필요
-            console.log(email, uid);
+            try {
+                await requestForFriend(email, uid);
+                alert('친구 요청을 보냈습니다.');
+            } catch (error) {
+                alert(error.message);
+            }
         }
     };
 
@@ -103,7 +101,12 @@ const My = ({ setIsLoggedIn }) => {
                 <div className="flex justify-between items-center">
                     <img src="/images/logo-title.png" alt="logo" className="h-[45px]" onClick={onClickLogo} />
                     <div className="flex items-center space-x-3">
-                        <img src="icons/alarm.svg" alt="alarm" className="w-[27px] h-[27px]" onClick={onClickAlarm} />
+                        <img
+                            src="icons/request.svg"
+                            alt="request"
+                            className="w-[27px] h-[27px]"
+                            onClick={onClickRequests}
+                        />
                         <img
                             src="/icons/setting.svg"
                             alt="setting"
@@ -144,7 +147,7 @@ const My = ({ setIsLoggedIn }) => {
                     <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-2">
                             <p className="text-xl font-bold">친구</p>
-                            <p className="text-gray-500">({FRIENDS.length})</p>
+                            <p className="text-gray-500">{friends ? `(${friends.length})` : '(0)'}</p>
                         </div>
                         <img
                             src="/icons/chevron-right.svg"
@@ -154,14 +157,14 @@ const My = ({ setIsLoggedIn }) => {
                         />
                     </div>
                     <div className="flex items-center space-x-4">
-                        {FRIENDS && FRIENDS.length > 0 ? (
-                            FRIENDS.map(
+                        {friends && friends.length > 0 ? (
+                            friends.map(
                                 (
                                     friend // 상위 3명
                                 ) => (
-                                    <div key={friend.email} className="flex flex-col items-center gap-1">
+                                    <div key={friend.email} className="flex flex-col items-center">
                                         <img
-                                            src={friend.photoURL}
+                                            src={friend.photoURL || '/images/no-profile.png'}
                                             alt="friend"
                                             className="w-[50px] h-[50px] rounded-full"
                                         />
@@ -182,11 +185,11 @@ const My = ({ setIsLoggedIn }) => {
                         <input
                             type="text"
                             placeholder="이메일로 친구를 검색해보세요"
-                            className="w-full h-10 px-3 border border-gray-300 rounded-md"
+                            className="w-full h-10 px-3 border border-gray-300 rounded-md text-sm"
                             value={searchEmail}
                             onChange={e => setSearchEmail(e.target.value)}
                         />
-                        <button className="w-20 h-10 bg-blue-500 text-white rounded-md" onClick={onClickSearchFriends}>
+                        <button className="w-16 h-10 bg-blue-500 text-white rounded-md text-sm" onClick={onClickSearchFriends}>
                             검색
                         </button>
                     </div>

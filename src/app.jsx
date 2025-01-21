@@ -15,7 +15,7 @@ import My from './pages/profile/my';
 import Login from './pages/profile/login';
 import Signup from './pages/profile/signup';
 import EditProfile from './pages/profile/edit-profile';
-import Alarms from './pages/profile/alarms';
+import Requests from './pages/profile/requests';
 import Setting from './pages/profile/setting';
 import Friends from './pages/profile/friends';
 
@@ -37,7 +37,7 @@ const App = () => {
                     <Route path="/login" element={<Login />} />
                     <Route path="/signup" element={<Signup />} />
                     <Route path="/edit-profile" element={<EditProfile />} />
-                    <Route path="/alarms" element={<Alarms />} />
+                    <Route path="/requests" element={<Requests />} />
                     <Route path="/setting" element={<Setting setIsLoggedIn={setIsLoggedIn} />} />
                     <Route path="/friends" element={<Friends />} />
 
