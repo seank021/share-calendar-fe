@@ -35,8 +35,6 @@ const Friends = () => {
             if (result) {
                 alert('친구를 삭제했습니다.');
                 window.location.reload();
-            } else {
-                alert('친구 삭제에 실패했습니다.');
             }
         }
     };

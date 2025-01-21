@@ -54,7 +54,7 @@ const MyCalendar = () => {
                 ...doc.data(),
             }));
 
-            // 이벤트를 시간 순서대로 정렬
+            // 일정을 시간 순서대로 정렬
             const sortedEvents = fetchedEvents.sort((a, b) => {
                 const timeA = parseInt(a.time.split(' ~ ')[0].replace(':', ''), 10);
                 const timeB = parseInt(b.time.split(' ~ ')[0].replace(':', ''), 10);
@@ -82,7 +82,7 @@ const MyCalendar = () => {
                 setSelectedDate({ date, events: dayEvents }); // 이미 정렬된 상태
                 setShowModal(true);
             } else {
-                console.log('더블 클릭으로 이벤트 추가 페이지로 이동 가능');
+                console.log('더블 클릭으로 일정 추가 페이지로 이동 가능');
             }
         }
         setLastClickTimestamp(currentTimestamp);

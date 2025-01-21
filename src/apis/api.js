@@ -63,14 +63,15 @@ export const addEvent = async event => {
         if (!currentUser) {
             alert('로그인이 필요합니다');
             navigate('/login');
-            return;
+            return false;
         }
 
         const eventsRef = collection(db, 'users', currentUser.email, 'events');
         await addDoc(eventsRef, event);
         return true;
     } catch (error) {
-        console.error('이벤트 저장 실패:', error);
+        console.error('일정 저장 실패:', error);
+        alert('일정 저장에 실패했습니다.');
         return false;
     }
 };
@@ -82,22 +83,23 @@ export const updateEvent = async (selectedEventId, updatedEvent) => {
         if (!currentUser) {
             alert('로그인이 필요합니다');
             navigate('/login');
-            return;
+            return false;
         }
 
         const eventDocRef = doc(db, 'users', currentUser.email, 'events', selectedEventId);
         await updateDoc(eventDocRef, updatedEvent);
         return true;
     } catch (error) {
-        console.error('이벤트 수정 실패:', error);
+        console.error('일정 수정 실패:', error);
+        alert('일정 수정에 실패했습니다.');
         return false;
     }
 };
 
 export const deleteEvent = async event => {
     if (!event.id) {
-        alert('삭제할 이벤트 ID가 없습니다.');
-        return;
+        alert('삭제할 일정 ID가 없습니다.');
+        return false;
     }
 
     if (window.confirm('삭제하시겠습니까?')) {
@@ -107,14 +109,15 @@ export const deleteEvent = async event => {
 
             if (!currentUser) {
                 alert('로그인이 필요합니다.');
-                return;
+                return false;
             }
 
             const eventDocRef = doc(db, 'users', currentUser.email, 'events', event.id);
             await deleteDoc(eventDocRef);
             return true;
         } catch (error) {
-            console.error('이벤트 삭제 중 오류 발생:', error);
+            console.error('일정 삭제 중 오류 발생:', error);
+            alert('일정 삭제에 실패했습니다.');
             return false;
         }
     }
@@ -243,7 +246,14 @@ export const getTop3Friends = async () => {
 export const requestForFriend = async (friendEmail, friendUid) => {
     if (!friendEmail || !friendUid) {
         alert('친구 정보가 없습니다.');
-        return;
+        return false;
+    }
+
+    // 이미 친구인 경우 - 친구 요청 불가
+    const friends = await getFriends();
+    if (friends.some(friend => friend.email === friendEmail)) {
+        alert('이미 친구입니다.');
+        return false;
     }
 
     try {
@@ -252,7 +262,7 @@ export const requestForFriend = async (friendEmail, friendUid) => {
 
         if (!currentUser) {
             alert('로그인이 필요합니다.');
-            return;
+            return false;
         }
 
         const friendDocRef = doc(db, 'users', friendEmail, 'requests', currentUser.email);
@@ -265,6 +275,7 @@ export const requestForFriend = async (friendEmail, friendUid) => {
         return true;
     } catch (error) {
         console.error('친구 요청 실패:', error);
+        alert('친구 요청에 실패했습니다.');
         return false;
     }
 };
@@ -301,7 +312,7 @@ export const getRequests = async () => {
 export const acceptRequest = async (friendUid, friendEmail) => {
     if (!friendUid || !friendEmail) {
         alert('친구 정보가 없습니다.');
-        return;
+        return false;
     }
 
     try {
@@ -310,7 +321,7 @@ export const acceptRequest = async (friendUid, friendEmail) => {
 
         if (!currentUser) {
             alert('로그인이 필요합니다.');
-            return;
+            return false;
         }
 
         // 친구 목록에 추가
@@ -334,6 +345,7 @@ export const acceptRequest = async (friendUid, friendEmail) => {
         return true;
     } catch (error) {
         console.error('친구 요청 수락 실패:', error);
+        alert('친구 요청 수락에 실패했습니다.');
         return false;
     }
 };
@@ -342,7 +354,7 @@ export const acceptRequest = async (friendUid, friendEmail) => {
 export const rejectRequest = async friendEmail => {
     if (!friendEmail) {
         alert('친구 정보가 없습니다.');
-        return;
+        return false;
     }
 
     try {
@@ -351,7 +363,7 @@ export const rejectRequest = async friendEmail => {
 
         if (!currentUser) {
             alert('로그인이 필요합니다.');
-            return;
+            return false;
         }
 
         // 요청 resolved로 업데이트
@@ -361,6 +373,7 @@ export const rejectRequest = async friendEmail => {
         return true;
     } catch (error) {
         console.error('친구 요청 거절 실패:', error);
+        alert('친구 요청 거절에 실패했습니다.');
         return false;
     }
 };
@@ -369,7 +382,7 @@ export const rejectRequest = async friendEmail => {
 export const deleteFriend = async (friendUid, friendEmail) => {
     if (!friendUid || !friendEmail) {
         alert('친구 정보가 없습니다.');
-        return;
+        return false;
     }
 
     try {
@@ -378,7 +391,7 @@ export const deleteFriend = async (friendUid, friendEmail) => {
 
         if (!currentUser) {
             alert('로그인이 필요합니다.');
-            return;
+            return false;
         }
 
         // 현재 사용자의 친구 목록에서 삭제
@@ -392,6 +405,7 @@ export const deleteFriend = async (friendUid, friendEmail) => {
         return true;
     } catch (error) {
         console.error('친구 삭제 실패:', error);
+        alert('친구 삭제에 실패했습니다.');
         return false;
     }
 };
@@ -426,7 +440,7 @@ export const updateProfileInfo = async (photoURL, nickname) => {
 
         if (!currentUser) {
             alert('로그인이 필요합니다.');
-            return;
+            return false;
         }
 
         // Firebase Authentication 프로필 업데이트
@@ -445,6 +459,7 @@ export const updateProfileInfo = async (photoURL, nickname) => {
         return true;
     } catch (error) {
         console.error('프로필 수정 실패:', error);
+        alert('프로필 수정에 실패했습니다.');
         return false;
     }
 }

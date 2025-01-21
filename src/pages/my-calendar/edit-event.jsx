@@ -6,7 +6,7 @@ import { updateEvent } from '../../apis/api';
 const EditEvent = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const selectedEvent = location.state?.event; // 전달받은 이벤트 데이터
+    const selectedEvent = location.state?.event;
 
     const formatDateForInput = dateString => {
         const [year, month, day] = dateString.split('-').map(Number);
@@ -20,7 +20,7 @@ const EditEvent = () => {
         return `${year}-${month}-${day}`;
     };
 
-    // 기존 이벤트 정보 기본 값으로 설정
+    // 기존 일정 정보 기본 값으로 설정
     const [title, setTitle] = useState(selectedEvent?.title || '');
     const [date, setDate] = useState(selectedEvent?.date ? formatDateForInput(selectedEvent.date) : '');
     const [startTime, setStartTime] = useState(selectedEvent?.time.split(' ~ ')[0] || '08:00');
@@ -31,7 +31,7 @@ const EditEvent = () => {
     const [isPrivate, setIsPrivate] = useState(selectedEvent?.isPrivate || false);
     const [showColorModal, setShowColorModal] = useState(false);
 
-    // 수정된 이벤트 저장
+    // 수정된 일정 저장
     const handleSave = async () => {
         if (!title) {
             alert('제목을 입력하세요');
@@ -57,8 +57,6 @@ const EditEvent = () => {
         if (res) {
             alert('일정이 수정되었습니다');
             navigate(-1);
-        } else {
-            alert('일정 수정에 실패했습니다');
         }
     };
 

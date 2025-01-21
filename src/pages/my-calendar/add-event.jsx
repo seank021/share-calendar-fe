@@ -47,8 +47,6 @@ const AddEvent = () => {
         if (res) {
             alert('일정이 추가되었습니다');
             navigate(-1);
-        } else {
-            alert('일정 추가에 실패했습니다');
         }
     };
 

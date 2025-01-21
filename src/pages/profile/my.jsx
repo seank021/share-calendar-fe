@@ -102,11 +102,9 @@ const My = ({ setIsLoggedIn }) => {
 
     const onClickAddFriend = async (email, uid) => {
         if (window.confirm('친구 요청을 보내시겠습니까?')) {
-            try {
-                await requestForFriend(email, uid);
+            const result = await requestForFriend(email, uid);
+            if (result) {
                 alert('친구 요청을 보냈습니다.');
-            } catch (error) {
-                alert(error.message);
             }
         }
     };

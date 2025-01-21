@@ -36,8 +36,6 @@ const Requests = () => {
             if (result) {
                 alert('친구 요청을 수락했습니다.');
                 window.location.reload();
-            } else {
-                alert('친구 요청 수락에 실패했습니다.');
             }
         }
     };
@@ -48,8 +46,6 @@ const Requests = () => {
             if (result) {
                 alert('친구 요청을 거절했습니다.');
                 window.location.reload();
-            } else {
-                alert('친구 요청 거절에 실패했습니다.');
             }
         }
     };

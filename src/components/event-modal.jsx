@@ -26,8 +26,6 @@ const EventModal = ({ date, events, onClose, onAddEvent }) => {
         if (res) {
             alert('일정이 삭제되었습니다');
             window.location.reload(); // 페이지 새로고침
-        } else {
-            alert('일정 삭제에 실패했습니다');
         }
     };
 
@@ -77,7 +75,7 @@ const EventModal = ({ date, events, onClose, onAddEvent }) => {
                                 <button
                                     className="absolute right-0 top-1 bg-red-500 text-white text-sm px-2 py-1 rounded-md hover:bg-red-600"
                                     onClick={e => {
-                                        e.stopPropagation(); // 이벤트 전파 중단
+                                        e.stopPropagation();
                                         handleDeleteEvent(event);
                                     }}
                                 >

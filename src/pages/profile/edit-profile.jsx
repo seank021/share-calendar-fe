@@ -36,16 +36,10 @@ const EditProfile = () => {
     };
 
     const handleSave = async () => {
-        try {
-            const result = await updateProfileInfo(photoURL, nickname);
-            if (result) {
-                alert('프로필이 수정되었습니다.');
-                navigate(-1);
-            } else {
-                alert('프로필 수정에 실패했습니다.');
-            }
-        } catch (error) {
-            alert(error.message);
+        const result = await updateProfileInfo(photoURL, nickname);
+        if (result) {
+            alert('프로필이 수정되었습니다.');
+            navigate(-1);
         }
     };
 
