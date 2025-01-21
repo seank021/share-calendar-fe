@@ -64,7 +64,7 @@ const ShareCalendar = () => {
             </div>
 
             <div className="flex flex-col gap-4 p-4 overflow-y-auto">
-                {friends.map((friend, index) => (
+                {friends && friends.map((friend, index) => (
                     <div
                         key={index}
                         className="flex items-center justify-between px-4 py-3 rounded-lg bg-white shadow-md hover:shadow-lg transition-shadow"
@@ -88,6 +88,11 @@ const ShareCalendar = () => {
                         </div>
                     </div>
                 ))}
+                {friends.length === 0 && (
+                    <div className="flex items-center text-center text-md justify-center mt-10 text-gray-400">
+                        <p>친구가 없습니다.<br/>"프로필" 탭에서 친구를 추가해보세요!</p>
+                    </div>
+                )}
             </div>
         </div>
     );
