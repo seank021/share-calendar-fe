@@ -45,7 +45,7 @@ const MyCalendar = () => {
     useEffect(() => {
         if (!currentUser) return;
 
-        const eventsRef = collection(db, 'users', currentUser.uid, 'events');
+        const eventsRef = collection(db, 'users', currentUser.email, 'events');
 
         // Firestore에서 데이터 가져오기
         const unsubscribe = onSnapshot(eventsRef, snapshot => {
