@@ -5,6 +5,10 @@ import { verifyEmail } from '../../apis/api';
 const Setting = ({ setIsLoggedIn }) => {
     const navigate = useNavigate();
 
+    const onClickChangePassword = () => {
+        navigate('/change-password');
+    };
+
     const handleLogout = () => {
         if (window.confirm('로그아웃 하시겠습니까?')) {
             setIsLoggedIn(false);
@@ -31,6 +35,11 @@ const Setting = ({ setIsLoggedIn }) => {
             <div className="flex items-center justify-between px-4 py-3 border-b" onClick={verifyEmail}>
                 <p className="text-md">이메일 인증</p>
                 <img src="/icons/chevron-right.svg" alt="이메일 인증" className="w-6 h-6" />
+            </div>
+            {/* 비밀번호 변경 */}
+            <div className="flex items-center justify-between px-4 py-3 border-b" onClick={onClickChangePassword}>
+                <p className="text-md">비밀번호 변경</p>
+                <img src="/icons/chevron-right.svg" alt="비밀번호 변경" className="w-6 h-6" />
             </div>
             {/* 로그아웃 버튼 */}
             <div className="flex items-center justify-between px-4 py-3 border-b" onClick={handleLogout}>

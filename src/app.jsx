@@ -18,6 +18,7 @@ import EditProfile from './pages/profile/edit-profile';
 import Requests from './pages/profile/requests';
 import Setting from './pages/profile/setting';
 import Friends from './pages/profile/friends';
+import ChangePassword from './pages/profile/change-password';
 
 const App = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -40,6 +41,7 @@ const App = () => {
                     <Route path="/requests" element={<Requests />} />
                     <Route path="/setting" element={<Setting setIsLoggedIn={setIsLoggedIn} />} />
                     <Route path="/friends" element={<Friends />} />
+                    <Route path="/change-password" element={<ChangePassword />} />
 
                     <Route path="*" element={<div>404 Not Found</div>} />
                 </Routes>

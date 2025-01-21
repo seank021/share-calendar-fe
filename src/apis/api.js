@@ -18,6 +18,9 @@ import {
     signInWithEmailAndPassword,
     onAuthStateChanged,
     sendEmailVerification,
+    EmailAuthProvider,
+    reauthenticateWithCredential,
+    updatePassword,
 } from 'firebase/auth';
 
 export const signup = async (email, password, password_, nickname) => {
@@ -476,3 +479,42 @@ export const updateProfileInfo = async (photoURL, nickname) => {
         return false;
     }
 };
+
+export const changePassword = async (currentPassword, newPassword, confirmPassword) => {
+    if (newPassword !== confirmPassword) {
+        alert('새 비밀번호가 일치하지 않습니다.');
+        return false;
+    }
+
+    try {
+        const auth = getAuth(app);
+        const currentUser = auth.currentUser;
+
+        if (!currentUser) {
+            alert('로그인이 필요합니다.');
+            return false;
+        }
+
+        // 현재 사용자의 이메일로 자격 증명 생성
+        const credential = EmailAuthProvider.credential(currentUser.email, currentPassword);
+        
+        // 재인증 수행
+        await reauthenticateWithCredential(currentUser, credential);
+
+        // 비밀번호 변경
+        await updatePassword(currentUser, newPassword);
+
+        return true;
+    } catch (error) {
+        if (error.code === 'auth/invalid-credential') {
+            alert('현재 비밀번호가 일치하지 않습니다.');
+        } else if (error.code === 'auth/weak-password') {
+            alert('비밀번호는 6자리 이상이어야 합니다.');
+        } else {
+            console.error('비밀번호 변경 중 오류:', error);
+            alert('비밀번호 변경에 실패했습니다.');
+        }
+
+        return false;
+    }
+}
