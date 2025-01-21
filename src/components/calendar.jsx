@@ -74,7 +74,7 @@ const Calendar = ({ events, onDateClick, currentDate }) => {
                                 {dayEvents.slice(0, 3).map((event, idx) => (
                                     <span
                                         key={idx}
-                                        className="text-xs rounded-sm text-white line-clamp-2"
+                                        className="text-xs rounded-sm text-white line-clamp-2 tracking-tighter"
                                         style={{
                                             backgroundColor: event.color,
                                             display: '-webkit-box',
