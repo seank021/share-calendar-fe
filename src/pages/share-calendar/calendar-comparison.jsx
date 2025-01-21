@@ -92,10 +92,7 @@ const CalendarComparison = () => {
                 {/* 시간대 */}
                 <div className="relative w-auto px-1">
                     <h2 className="text-white text-sm">시간대</h2>
-                    <div
-                        className="flex flex-col gap-[20px] text-sm"
-                        style={{ height: '960px' }}
-                    >
+                    <div className="flex flex-col gap-[20px] text-sm" style={{ height: '960px' }}>
                         {Array.from({ length: 24 }, (_, idx) => (
                             <p key={idx}>{idx.toString().padStart(2, '0')}:00</p>
                         ))}

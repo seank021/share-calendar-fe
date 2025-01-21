@@ -59,7 +59,11 @@ const ShareCalendar = () => {
 
             <div className="flex flex-col gap-3 p-4 overflow-y-auto">
                 {friends.map((friend, index) => (
-                    <div key={index} className="flex items-center px-2 py-3 border rounded-lg justify-between shadow-sm" onClick={() => handleFriendClick(friend.email, friend.displayName)}>
+                    <div
+                        key={index}
+                        className="flex items-center px-2 py-3 border rounded-lg justify-between shadow-sm"
+                        onClick={() => handleFriendClick(friend.email, friend.displayName)}
+                    >
                         <div className="flex items-center gap-4">
                             <img
                                 src={friend.photoURL || '/images/no-profile.png'}
@@ -71,11 +75,7 @@ const ShareCalendar = () => {
                                 <p className="text-sm text-gray-400">{friend.email}</p>
                             </div>
                         </div>
-                        <img
-                            src="/icons/chevron-right.svg"
-                            alt="보기"
-                            className="w-7 h-7 mr-1"
-                        />
+                        <img src="/icons/chevron-right.svg" alt="보기" className="w-7 h-7 mr-1" />
                     </div>
                 ))}
             </div>
