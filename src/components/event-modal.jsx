@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { doc, deleteDoc } from 'firebase/firestore';
-import { getAuth } from 'firebase/auth';
-import { db } from '../firebase';
+import { deleteEvent } from '../apis/api';
 
 const EventModal = ({ date, events, onClose, onAddEvent }) => {
     const navigate = useNavigate();
@@ -24,29 +22,12 @@ const EventModal = ({ date, events, onClose, onAddEvent }) => {
     };
 
     const handleDeleteEvent = async event => {
-        if (!event.id) {
-            alert('삭제할 이벤트 ID가 없습니다.');
-            return;
-        }
-
-        if (window.confirm('삭제하시겠습니까?')) {
-            try {
-                const auth = getAuth();
-                const currentUser = auth.currentUser;
-
-                if (!currentUser) {
-                    alert('로그인이 필요합니다.');
-                    return;
-                }
-
-                const eventDocRef = doc(db, 'users', currentUser.uid, 'events', event.id);
-                await deleteDoc(eventDocRef);
-                alert('이벤트가 삭제되었습니다.');
-                window.location.reload(); // 페이지 새로고침
-            } catch (error) {
-                console.error('이벤트 삭제 중 오류 발생:', error);
-                alert('이벤트를 삭제할 수 없습니다.');
-            }
+        const res = await deleteEvent(event);
+        if (res) {
+            alert('일정이 삭제되었습니다');
+            window.location.reload(); // 페이지 새로고침
+        } else {
+            alert('일정 삭제에 실패했습니다');
         }
     };
 

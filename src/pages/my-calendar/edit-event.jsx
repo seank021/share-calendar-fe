@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import ColorSelectModal from '../../components/color-select-modal';
-import { getAuth } from 'firebase/auth';
-import { doc, updateDoc } from 'firebase/firestore';
-import { app, db } from '../../firebase';
+import { updateEvent } from '../../apis/api';
 
 const EditEvent = () => {
     const location = useLocation();
@@ -45,15 +43,6 @@ const EditEvent = () => {
             return;
         }
 
-        const auth = getAuth(app);
-        const currentUser = auth.currentUser;
-
-        if (!currentUser) {
-            alert('로그인이 필요합니다');
-            navigate('/login');
-            return;
-        }
-
         const updatedEvent = {
             date: reverseFormatDate(date),
             title,
@@ -64,14 +53,12 @@ const EditEvent = () => {
             isPrivate,
         };
 
-        try {
-            const eventDocRef = doc(db, 'users', currentUser.uid, 'events', selectedEvent.id);
-            await updateDoc(eventDocRef, updatedEvent);
-            alert('이벤트가 수정되었습니다.');
-            navigate(-1); // 이전 화면으로 이동
-        } catch (error) {
-            console.error('이벤트 수정 실패:', error);
-            alert('이벤트 수정 중 오류가 발생했습니다.');
+        const res = await updateEvent(selectedEvent.id, updatedEvent);
+        if (res) {
+            alert('일정이 수정되었습니다');
+            navigate(-1);
+        } else {
+            alert('일정 수정에 실패했습니다');
         }
     };
 

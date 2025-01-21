@@ -1,9 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ColorSelectModal from '../../components/color-select-modal';
-import { getAuth } from 'firebase/auth';
-import { collection, addDoc } from 'firebase/firestore';
-import { app, db } from '../../firebase';
+import { addEvent } from '../../apis/api';
 
 const AddEvent = () => {
     const navigate = useNavigate();
@@ -35,15 +33,6 @@ const AddEvent = () => {
             return;
         }
 
-        const auth = getAuth(app);
-        const currentUser = auth.currentUser;
-
-        if (!currentUser) {
-            alert('로그인이 필요합니다');
-            navigate('/login');
-            return;
-        }
-
         const event = {
             date,
             title,
@@ -54,14 +43,12 @@ const AddEvent = () => {
             isPrivate,
         };
 
-        try {
-            const eventsRef = collection(db, 'users', currentUser.uid, 'events');
-            await addDoc(eventsRef, event);
-            alert('이벤트가 저장되었습니다.');
-            navigate(-1); // 이전 화면으로 이동
-        } catch (error) {
-            console.error('이벤트 저장 실패:', error);
-            alert('이벤트 저장 중 오류가 발생했습니다.');
+        const res = await addEvent(event);
+        if (res) {
+            alert('일정이 추가되었습니다');
+            navigate(-1);
+        } else {
+            alert('일정 추가에 실패했습니다');
         }
     };
 
