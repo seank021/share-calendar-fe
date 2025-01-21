@@ -83,7 +83,12 @@ const BottomTab = () => {
                     color:
                         location.pathname === '/profile' ||
                         location.pathname === '/login' ||
-                        location.pathname === '/signup'
+                        location.pathname === '/signup' ||
+                        location.pathname === '/edit-profile' ||
+                        location.pathname === '/friends' ||
+                        location.pathname === '/setting' ||
+                        location.pathname === '/my' ||
+                        location.pathname === '/alarms'
                             ? '#007BFF'
                             : '#000',
                     display: 'flex',
@@ -97,7 +102,12 @@ const BottomTab = () => {
                     src={
                         location.pathname === '/profile' ||
                         location.pathname === '/login' ||
-                        location.pathname === '/signup'
+                        location.pathname === '/signup' ||
+                        location.pathname === '/edit-profile' ||
+                        location.pathname === '/friends' ||
+                        location.pathname === '/setting' ||
+                        location.pathname === '/my' ||
+                        location.pathname === '/alarms'
                             ? profileColor
                             : profile
                     }
