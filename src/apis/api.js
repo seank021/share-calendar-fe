@@ -6,6 +6,7 @@ import {
     updateProfile,
     signInWithEmailAndPassword,
     onAuthStateChanged,
+    sendEmailVerification,
 } from 'firebase/auth';
 
 export const signup = async (email, password, password_, nickname) => {
@@ -121,4 +122,27 @@ export const getUserInfo = async () => {
             }
         });
     });
+};
+
+export const verifyEmail = async () => {
+    const auth = getAuth(app);
+    const currentUser = auth.currentUser;
+
+    if (!currentUser) {
+        alert('로그인이 필요합니다.');
+        return;
+    }
+
+    if (currentUser.emailVerified) {
+        alert('이미 이메일이 인증되었습니다.');
+        return;
+    }
+
+    try {
+        await sendEmailVerification(currentUser);
+        alert('이메일 인증 요청을 보냈습니다. 이메일을 확인하세요.');
+    } catch (error) {
+        console.error('이메일 인증 요청 실패:', error);
+        alert('이메일 인증 요청에 실패했습니다.');
+    }
 };

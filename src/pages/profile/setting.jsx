@@ -1,13 +1,10 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { verifyEmail } from '../../apis/api';
 
 const Setting = ({ setIsLoggedIn }) => {
     const navigate = useNavigate();
-
-    const verifyEmail = () => {
-        console.log('이메일 인증');
-    };
-
+    
     const handleLogout = () => {
         if (window.confirm('로그아웃 하시겠습니까?')) {
             setIsLoggedIn(false);
