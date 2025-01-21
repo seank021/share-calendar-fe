@@ -497,7 +497,7 @@ export const changePassword = async (currentPassword, newPassword, confirmPasswo
 
         // 현재 사용자의 이메일로 자격 증명 생성
         const credential = EmailAuthProvider.credential(currentUser.email, currentPassword);
-        
+
         // 재인증 수행
         await reauthenticateWithCredential(currentUser, credential);
 
@@ -517,4 +517,4 @@ export const changePassword = async (currentPassword, newPassword, confirmPasswo
 
         return false;
     }
-}
+};
