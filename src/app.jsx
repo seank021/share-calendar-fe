@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import '../src/styles/globals.css';
 
@@ -21,6 +21,7 @@ import Setting from './pages/profile/setting';
 import Friends from './pages/profile/friends';
 import ChangePassword from './pages/profile/change-password';
 import FindPassword from './pages/profile/find-password';
+import NotFound from './pages/not-found';
 
 const App = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -47,7 +48,7 @@ const App = () => {
                     <Route path="/change-password" element={<ChangePassword />} />
                     <Route path="/find-password" element={<FindPassword />} />
 
-                    <Route path="*" element={<div>404 Not Found</div>} />
+                    <Route path="*" element={<NotFound />} />
                 </Routes>
                 <BottomTab />
             </BrowserRouter>
