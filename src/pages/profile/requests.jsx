@@ -20,7 +20,7 @@ const Requests = () => {
                         };
                     })
                 );
-                
+
                 // 친구 요청을 시간 순서대로 정렬
                 requestsWithNames.sort((a, b) => b.createdAt - a.createdAt);
 
