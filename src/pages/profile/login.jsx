@@ -38,7 +38,10 @@ const Login = () => {
                     로그인
                 </button>
             </div>
-            <h2 className="text-center mt-4 underline text-gray-400 text-sm" onClick={() => navigate('/signup')}>
+            <h2 className="text-center mt-6 underline text-gray-400 text-sm" onClick={() => navigate('/find-password')}>
+                비밀번호를 잊으셨나요?
+            </h2>
+            <h2 className="text-center mt-2 underline text-gray-400 text-sm" onClick={() => navigate('/signup')}>
                 계정이 없다면?
             </h2>
         </div>

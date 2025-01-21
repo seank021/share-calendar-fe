@@ -21,6 +21,7 @@ import {
     EmailAuthProvider,
     reauthenticateWithCredential,
     updatePassword,
+    sendPasswordResetEmail,
 } from 'firebase/auth';
 
 export const signup = async (email, password, password_, nickname) => {
@@ -515,6 +516,24 @@ export const changePassword = async (currentPassword, newPassword, confirmPasswo
             alert('비밀번호 변경에 실패했습니다.');
         }
 
+        return false;
+    }
+};
+
+export const findPassword = async email => {
+    if (!email) {
+        alert('이메일을 입력해주세요.');
+        return false;
+    }
+
+    try {
+        const auth = getAuth(app);
+        await sendPasswordResetEmail(auth, email);
+        alert('비밀번호 재설정 이메일을 보냈습니다. 이메일을 확인하세요.');
+        return true;
+    } catch (error) {
+        console.error('비밀번호 찾기 실패:', error);
+        alert('비밀번호 찾기에 실패했습니다.');
         return false;
     }
 };
