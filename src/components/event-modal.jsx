@@ -25,7 +25,7 @@ const EventModal = ({ date, events, onClose, onAddEvent }) => {
         const res = await deleteEvent(event);
         if (res) {
             alert('일정이 삭제되었습니다');
-            window.location.reload(); // 페이지 새로고침
+            onClose();
         }
     };
 
