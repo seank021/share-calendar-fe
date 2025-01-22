@@ -1,6 +1,7 @@
 import { collection, doc, setDoc, updateDoc, getDocs } from 'firebase/firestore';
 import { app, db } from '../firebase';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { getFriends } from './friend';
 
 export const requestForFriend = async (friendEmail, friendUid) => {
     if (!friendEmail || !friendUid) {
