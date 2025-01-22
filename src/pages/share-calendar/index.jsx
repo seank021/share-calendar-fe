@@ -82,11 +82,11 @@ const ShareCalendar = () => {
                             className="flex items-center justify-between px-4 py-3 rounded-lg bg-white shadow-md hover:shadow-lg transition-shadow"
                             onClick={() => handleFriendClick(friend.email, friend.displayName)}
                         >
-                            <div className="flex items-center gap-4">
+                            <div className="flex items-center gap-3">
                                 <img
                                     src={friend.photoURL || '/images/no-profile.png'}
                                     alt="profile"
-                                    className="w-14 h-14 rounded-full object-cover border-2 border-blue-500"
+                                    className="w-16 h-16 rounded-full object-cover"
                                 />
                                 <div>
                                     <p className="text-lg font-semibold text-gray-800">{friend.displayName}</p>
