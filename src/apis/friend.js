@@ -61,6 +61,29 @@ export const getTop3Friends = async () => {
     });
 };
 
+export const getFriendsNumber = async () => {
+    const auth = getAuth(app);
+
+    return new Promise((resolve, reject) => {
+        onAuthStateChanged(auth, async user => {
+            if (!user) {
+                console.error('사용자가 로그아웃되었습니다.');
+                return reject(new Error('로그인된 사용자가 없습니다.'));
+            }
+
+            try {
+                const friendsRef = collection(db, 'users', user.email, 'friends');
+                const friendsSnapshot = await getDocs(friendsRef);
+
+                resolve(friendsSnapshot.size);
+            } catch (error) {
+                console.error('친구 목록 조회 실패:', error);
+                reject(new Error('친구 목록 조회 실패'));
+            }
+        });
+    });
+};
+
 // 친구 삭제 -> 현재 사용자의 친구 목록에서 friendEmail 삭제, 상대방 친구 목록에서 현재 사용자 삭제
 export const deleteFriend = async (friendUid, friendEmail) => {
     if (!friendUid || !friendEmail) {

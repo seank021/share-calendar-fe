@@ -38,6 +38,7 @@ const ShareCalendar = () => {
                         return {
                             ...request,
                             displayName: userInfo?.displayName || '',
+                            photoURL: userInfo?.photoURL || '',
                         };
                     })
                 );

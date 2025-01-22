@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getUserInfo, searchUsersByEmail, getUserInfoByEmail } from '../../apis/user';
-import { getTop3Friends } from '../../apis/friend';
+import { getTop3Friends, getFriendsNumber } from '../../apis/friend';
 import { requestForFriend, getRequests } from '../../apis/request';
 import Loading from '../loading';
 import '../../styles/globals.css';
@@ -54,10 +54,12 @@ const My = ({ setIsLoggedIn }) => {
     };
 
     const [friends, setFriends] = useState([]);
+    const [friendsNumber, setFriendsNumber] = useState(0);
     useEffect(() => {
         const fetchFriends = async () => {
             try {
                 const rawFriends = await getTop3Friends();
+                const friendsNumber = await getFriendsNumber();
 
                 const friendsWithNames = await Promise.all(
                     rawFriends.map(async request => {
@@ -65,11 +67,13 @@ const My = ({ setIsLoggedIn }) => {
                         return {
                             ...request,
                             displayName: userInfo?.displayName || '',
+                            photoURL: userInfo?.photoURL || '',
                         };
                     })
                 );
 
                 setFriends(friendsWithNames);
+                setFriendsNumber(friendsNumber);
             } catch (error) {
                 alert(error.message);
             }
@@ -186,7 +190,7 @@ const My = ({ setIsLoggedIn }) => {
                     <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-2">
                             <p className="text-xl font-bold">친구</p>
-                            <p className="text-gray-500">{friends ? `(${friends.length})` : '(0)'}</p>
+                            <p className="text-gray-500">({friendsNumber})</p>
                         </div>
                         <img
                             src="/icons/chevron-right.svg"
