@@ -107,8 +107,8 @@ const MyCalendar = () => {
             onTouchStart={e => (e.currentTarget.startX = e.touches[0].clientX)}
             onTouchEnd={e => {
                 const deltaX = e.changedTouches[0].clientX - e.currentTarget.startX;
-                if (deltaX > 70) handleSwipe('left');
-                else if (deltaX < -70) handleSwipe('right');
+                if (deltaX > 100) handleSwipe('left');
+                else if (deltaX < -100) handleSwipe('right');
             }}
             className="select-none"
         >
