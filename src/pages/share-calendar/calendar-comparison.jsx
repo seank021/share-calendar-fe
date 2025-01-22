@@ -63,8 +63,8 @@ const CalendarComparison = () => {
 
     const handleTouchEnd = e => {
         const deltaX = e.changedTouches[0].clientX - e.currentTarget.startX;
-        if (deltaX > 50) handleSwipe('left');
-        else if (deltaX < -50) handleSwipe('right');
+        if (deltaX > 70) handleSwipe('left');
+        else if (deltaX < -70) handleSwipe('right');
     };
 
     if (loading) {
@@ -101,7 +101,7 @@ const CalendarComparison = () => {
             <div className="flex flex-row overflow-y-auto justify-center w-full relative">
                 {/* 시간대 */}
                 <div className="relative w-auto px-1">
-                    <h2 className="text-white text-sm">시간대</h2>
+                    <h2 className="text-white text-xs">시간</h2>
                     <div className="flex flex-col gap-[20px] text-sm" style={{ height: '960px' }}>
                         {Array.from({ length: 24 }, (_, idx) => (
                             <p key={idx}>{idx.toString().padStart(2, '0')}:00</p>
