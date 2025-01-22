@@ -17,6 +17,7 @@ const Friends = () => {
                         return {
                             ...request,
                             displayName: userInfo?.displayName || '',
+                            photoURL: userInfo?.photoURL || '',
                         };
                     })
                 );
