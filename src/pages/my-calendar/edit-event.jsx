@@ -28,8 +28,57 @@ const EditEvent = () => {
     const [locationInput, setLocationInput] = useState(selectedEvent?.location || '');
     const [memo, setMemo] = useState(selectedEvent?.memo || '');
     const [color, setColor] = useState(selectedEvent?.color || '#4D96FF');
+    const [photoUrls, setPhotoUrls] = useState(selectedEvent?.photoUrls || []);
     const [isPrivate, setIsPrivate] = useState(selectedEvent?.isPrivate || false);
     const [showColorModal, setShowColorModal] = useState(false);
+
+    const handleImageChange = event => {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                const img = new Image();
+                img.src = reader.result;
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    const MAX_WIDTH = 300; // 최대 너비 
+                    const MAX_HEIGHT = 300; // 최대 높이
+
+                    let width = img.width;
+                    let height = img.height;
+
+                    // 크기 조정
+                    if (width > height && width > MAX_WIDTH) {
+                        height *= MAX_WIDTH / width;
+                        width = MAX_WIDTH;
+                    } else if (height > MAX_HEIGHT) {
+                        width *= MAX_HEIGHT / height;
+                        height = MAX_HEIGHT;
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.8); // 품질 80%
+
+                    // 중복된 사진은 추가하지 않음
+                    if (!photoUrls.includes(compressedDataUrl)) {
+                        setPhotoUrls([...photoUrls, compressedDataUrl]);
+                    }
+                };
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const onClickPhoto = photoUrl => {
+        if (window.confirm('사진을 삭제하시겠습니까?')) {
+            setPhotoUrls(photoUrls.filter(url => url !== photoUrl));
+        }
+    };
 
     // 수정된 일정 저장
     const handleSave = async () => {
@@ -50,6 +99,7 @@ const EditEvent = () => {
             time: `${startTime} ~ ${endTime}`,
             location: locationInput,
             memo,
+            photoUrls,
             isPrivate,
         };
 
@@ -142,6 +192,36 @@ const EditEvent = () => {
                         placeholder="메모를 입력하세요"
                         rows="4"
                     />
+                </div>
+
+                {/* 사진 첨부 */}
+                <div className="flex flex-col items-start">
+                    <div className='flex items-center'>
+                        <img src="/icons/camera.svg" alt="사진" className="w-5 h-5 mr-3" />
+                        <label htmlFor="photoInput" className="text-blue-500 cursor-pointer">
+                            <input
+                                type="file"
+                                id="photoInput"
+                                accept="image/*"
+                                className="hidden"
+                                onChange={handleImageChange}
+                                />
+                            사진 첨부
+                        </label>
+                    </div>
+                    {photoUrls && (
+                        <div className="flex gap-4 ml-8 overflow-x-auto mt-3">
+                            {photoUrls.map((photoUrl, idx) => (
+                                <img
+                                    key={idx}
+                                    src={photoUrl}
+                                    alt="photo"
+                                    className="w-24 h-24 rounded-lg"
+                                    onClick={() => onClickPhoto(photoUrl)}
+                                />
+                            ))}
+                        </div>
+                    )}
                 </div>
 
                 {/* 비공개 여부 */}

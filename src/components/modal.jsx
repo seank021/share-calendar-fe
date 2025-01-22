@@ -19,6 +19,19 @@ const EventDetailModal = ({ event, onClose }) => {
                 </p>
                 <p className="text-sm text-gray-500 mb-3">장소: {event.location || '장소가 없습니다'}</p>
                 <p className="text-sm text-gray-500">메모: {event.memo || '메모가 없습니다'}</p>
+
+                {event.photoUrls && (
+                    <div className="mt-4 overflow-x-auto flex gap-4" style={{ width: '100%' }}>
+                        {event.photoUrls.map((url, index) => (
+                            <img
+                                key={index}
+                                src={url}
+                                alt="event"
+                                className="w-24 h-24 object-cover rounded-lg"
+                            />
+                        ))}
+                    </div>
+                )}
             </div>
         </div>
     );
