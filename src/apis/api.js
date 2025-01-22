@@ -75,12 +75,6 @@ export const addEvent = async event => {
     try {
         const auth = getAuth(app);
         const currentUser = auth.currentUser;
-        if (!currentUser) {
-            alert('로그인이 필요합니다');
-            navigate('/login');
-            return false;
-        }
-
         const eventsRef = collection(db, 'users', currentUser.email, 'events');
         await addDoc(eventsRef, event);
         return true;
@@ -95,12 +89,6 @@ export const updateEvent = async (selectedEventId, updatedEvent) => {
     try {
         const auth = getAuth(app);
         const currentUser = auth.currentUser;
-        if (!currentUser) {
-            alert('로그인이 필요합니다');
-            navigate('/login');
-            return false;
-        }
-
         const eventDocRef = doc(db, 'users', currentUser.email, 'events', selectedEventId);
         await updateDoc(eventDocRef, updatedEvent);
         return true;
@@ -121,12 +109,6 @@ export const deleteEvent = async event => {
         try {
             const auth = getAuth(app);
             const currentUser = auth.currentUser;
-
-            if (!currentUser) {
-                alert('로그인이 필요합니다.');
-                return false;
-            }
-
             const eventDocRef = doc(db, 'users', currentUser.email, 'events', event.id);
             await deleteDoc(eventDocRef);
             return true;
@@ -143,11 +125,11 @@ export const getUserInfo = async () => {
 
     return new Promise((resolve, reject) => {
         onAuthStateChanged(auth, user => {
-            if (user) {
-                resolve(user);
-            } else {
-                reject(new Error('로그인이 필요합니다'));
+            if (!user) {
+                console.error('사용자가 로그아웃되었습니다.');
+                return reject(new Error('로그인된 사용자가 없습니다.'));
             }
+            resolve(user);
         });
     });
 };
@@ -155,11 +137,6 @@ export const getUserInfo = async () => {
 export const verifyEmail = async () => {
     const auth = getAuth(app);
     const currentUser = auth.currentUser;
-
-    if (!currentUser) {
-        alert('로그인이 필요합니다.');
-        return;
-    }
 
     if (currentUser.emailVerified) {
         alert('이미 이메일이 인증되었습니다.');
@@ -208,10 +185,11 @@ export const getFriends = async () => {
     const auth = getAuth(app);
 
     return new Promise((resolve, reject) => {
-        onAuthStateChanged(auth, async user => {
+        const unsubscribe = onAuthStateChanged(auth, async user => {
             if (!user) {
-                alert('로그인이 필요합니다.');
-                return reject(new Error('로그인이 필요합니다.'));
+                console.error('사용자가 로그아웃되었습니다.');
+                unsubscribe(); // 리스너 해제
+                return reject(new Error('로그인된 사용자가 없습니다.'));
             }
 
             try {
@@ -227,6 +205,8 @@ export const getFriends = async () => {
             } catch (error) {
                 console.error('친구 목록 조회 실패:', error);
                 reject(new Error('친구 목록 조회 실패'));
+            } finally {
+                unsubscribe(); // 리스너 해제
             }
         });
     });
@@ -238,8 +218,8 @@ export const getTop3Friends = async () => {
     return new Promise((resolve, reject) => {
         onAuthStateChanged(auth, async user => {
             if (!user) {
-                alert('로그인이 필요합니다.');
-                return reject(new Error('로그인이 필요합니다.'));
+                console.error('사용자가 로그아웃되었습니다.');
+                return reject(new Error('로그인된 사용자가 없습니다.'));
             }
 
             try {
@@ -266,7 +246,15 @@ export const requestForFriend = async (friendEmail, friendUid) => {
         return false;
     }
 
-    // 이미 친구인 경우 - 친구 요청 불가
+    const auth = getAuth(app);
+    const currentUser = auth.currentUser;
+
+    if (!currentUser) {
+        alert('로그인이 필요합니다.');
+        return false;
+    }
+
+    // 이미 친구인지 확인
     const friends = await getFriends();
     if (friends.some(friend => friend.email === friendEmail)) {
         alert('이미 친구입니다.');
@@ -274,14 +262,6 @@ export const requestForFriend = async (friendEmail, friendUid) => {
     }
 
     try {
-        const auth = getAuth(app);
-        const currentUser = auth.currentUser;
-
-        if (!currentUser) {
-            alert('로그인이 필요합니다.');
-            return false;
-        }
-
         const friendDocRef = doc(db, 'users', friendEmail, 'requests', currentUser.email);
         await setDoc(friendDocRef, {
             email: currentUser.email,
@@ -303,8 +283,8 @@ export const getRequests = async () => {
     return new Promise((resolve, reject) => {
         onAuthStateChanged(auth, async user => {
             if (!user) {
-                alert('로그인이 필요합니다.');
-                return reject(new Error('로그인이 필요합니다.'));
+                console.error('사용자가 로그아웃되었습니다.');
+                return reject(new Error('로그인된 사용자가 없습니다.'));
             }
 
             try {
@@ -332,30 +312,21 @@ export const acceptRequest = async (friendUid, friendEmail) => {
         return false;
     }
 
+    const auth = getAuth(app);
+    const currentUser = auth.currentUser;
+
+    if (!currentUser) {
+        alert('로그인이 필요합니다.');
+        return false;
+    }
+
     try {
-        const auth = getAuth(app);
-        const currentUser = auth.currentUser;
-
-        if (!currentUser) {
-            alert('로그인이 필요합니다.');
-            return false;
-        }
-
-        // 친구 목록에 추가
         const friendDocRef = doc(db, 'users', currentUser.email, 'friends', friendEmail);
-        await setDoc(friendDocRef, {
-            uid: friendUid,
-            email: friendEmail,
-        });
+        await setDoc(friendDocRef, { uid: friendUid, email: friendEmail });
 
-        // 상대방 친구 목록에 추가
         const currentUserDocRef = doc(db, 'users', friendEmail, 'friends', currentUser.email);
-        await setDoc(currentUserDocRef, {
-            uid: currentUser.uid,
-            email: currentUser.email,
-        });
+        await setDoc(currentUserDocRef, { uid: currentUser.uid, email: currentUser.email });
 
-        // 요청 resolved로 업데이트
         const requestDocRef = doc(db, 'users', currentUser.email, 'requests', friendEmail);
         await updateDoc(requestDocRef, { resolved: true });
 
@@ -374,16 +345,15 @@ export const rejectRequest = async friendEmail => {
         return false;
     }
 
+    const auth = getAuth(app);
+    const currentUser = auth.currentUser;
+
+    if (!currentUser) {
+        alert('로그인이 필요합니다.');
+        return false;
+    }
+
     try {
-        const auth = getAuth(app);
-        const currentUser = auth.currentUser;
-
-        if (!currentUser) {
-            alert('로그인이 필요합니다.');
-            return false;
-        }
-
-        // 요청 resolved로 업데이트
         const requestDocRef = doc(db, 'users', currentUser.email, 'requests', friendEmail);
         await updateDoc(requestDocRef, { resolved: true });
 
@@ -402,20 +372,18 @@ export const deleteFriend = async (friendUid, friendEmail) => {
         return false;
     }
 
+    const auth = getAuth(app);
+    const currentUser = auth.currentUser;
+
+    if (!currentUser) {
+        alert('로그인이 필요합니다.');
+        return false;
+    }
+
     try {
-        const auth = getAuth(app);
-        const currentUser = auth.currentUser;
-
-        if (!currentUser) {
-            alert('로그인이 필요합니다.');
-            return false;
-        }
-
-        // 현재 사용자의 친구 목록에서 삭제
         const friendDocRef = doc(db, 'users', currentUser.email, 'friends', friendEmail);
         await deleteDoc(friendDocRef);
 
-        // 상대방 친구 목록에서 삭제
         const currentUserDocRef = doc(db, 'users', friendEmail, 'friends', currentUser.email);
         await deleteDoc(currentUserDocRef);
 
@@ -455,11 +423,6 @@ export const updateProfileInfo = async (photoURL, nickname) => {
         const auth = getAuth(app);
         const currentUser = auth.currentUser;
 
-        if (!currentUser) {
-            alert('로그인이 필요합니다.');
-            return false;
-        }
-
         // Firebase Authentication 프로필 업데이트
         await updateProfile(currentUser, {
             displayName: nickname,
@@ -490,11 +453,6 @@ export const changePassword = async (currentPassword, newPassword, confirmPasswo
     try {
         const auth = getAuth(app);
         const currentUser = auth.currentUser;
-
-        if (!currentUser) {
-            alert('로그인이 필요합니다.');
-            return false;
-        }
 
         // 현재 사용자의 이메일로 자격 증명 생성
         const credential = EmailAuthProvider.credential(currentUser.email, currentPassword);
@@ -544,8 +502,8 @@ export const getUserEvents = async (email, date, includePrivate) => {
     return new Promise(async (resolve, reject) => {
         onAuthStateChanged(auth, async user => {
             if (!user) {
-                alert('로그인이 필요합니다.');
-                return reject(new Error('로그인이 필요합니다.'));
+                console.error('사용자가 로그아웃되었습니다.');
+                return reject(new Error('로그인된 사용자가 없습니다.'));
             }
 
             try {
@@ -557,11 +515,9 @@ export const getUserEvents = async (email, date, includePrivate) => {
                     return resolve([]);
                 }
 
-                // date에 해당하는 일정 필터링
                 let events = eventsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                 events = events.filter(event => event.date === date);
 
-                // isPrivate이 false인 경우만 필터링
                 if (!includePrivate) {
                     events = events.filter(event => !event.isPrivate);
                 }
@@ -598,3 +554,27 @@ export const changeImage = async (email, image) => {
         return false;
     }
 };
+
+export const isUserLoggedIn = async () => {
+    const auth = getAuth(app);
+
+    return new Promise((resolve, reject) => {
+        onAuthStateChanged(auth, user => {
+            if (user) {
+                resolve(true);
+            } else {
+                reject(false);
+            }
+        });
+    });
+};
+
+export const logout = async () => {
+    const auth = getAuth(app);
+    try {
+        await auth.signOut();
+        return true;
+    } catch (error) {
+        return false;
+    }
+}

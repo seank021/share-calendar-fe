@@ -12,8 +12,6 @@ const Login = () => {
     const onClickLogin = async () => {
         const user = await login(email, password);
         if (user) {
-            console.log(user);
-            localStorage.setItem('accessToken', user.accessToken);
             navigate('/');
         }
     };

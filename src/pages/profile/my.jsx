@@ -16,15 +16,13 @@ const My = ({ setIsLoggedIn }) => {
 
     useEffect(() => {
         const fetchUserInfo = async () => {
-            try {
-                const user = await getUserInfo();
+            const user = await getUserInfo();
+            if (user) {
                 setUserInfo(user);
-            } catch (error) {
-                alert(error.message);
+            } else {
                 setIsLoggedIn(false);
-            } finally {
-                setLoading(false);
             }
+            setLoading(false);
         };
 
         fetchUserInfo();

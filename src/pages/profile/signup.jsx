@@ -14,8 +14,6 @@ const Signup = () => {
     const onClickSignup = async () => {
         const user = await signup(email, password, password_, nickname);
         if (user) {
-            console.log(user);
-            localStorage.setItem('accessToken', user.accessToken);
             navigate('/');
         }
     };

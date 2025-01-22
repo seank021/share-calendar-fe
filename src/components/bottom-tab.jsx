@@ -8,18 +8,24 @@ import shareCalendar from '/icons/share-calendar.svg';
 import shareCalendarColor from '/icons/share-calendar-color.svg';
 import profile from '/icons/profile.svg';
 import profileColor from '/icons/profile-color.svg';
+import { isUserLoggedIn } from '../apis/api';
 
 const BottomTab = () => {
     const location = useLocation();
     const navigate = useNavigate();
 
-    const handleNavigation = path => {
-        const accessToken = localStorage.getItem('accessToken');
-        if (!accessToken && (path === '/' || path === '/my-calendar')) {
+    const handleNavigation = async path => {
+        try {
+            const isUser = await isUserLoggedIn();
+            if (!isUser && (path === '/' || path === '/my-calendar')) {
+                alert('로그인이 필요합니다.');
+                navigate('/profile');
+            } else {
+                navigate(path);
+            }
+        } catch (error) {
             alert('로그인이 필요합니다.');
-            navigate('/profile');
-        } else {
-            navigate(path);
+            navigate('/profile'); // 로그인 상태 확인 실패 시 프로필로 이동
         }
     };
 

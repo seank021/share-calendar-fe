@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { verifyEmail } from '../../apis/api';
+import { verifyEmail, logout } from '../../apis/api';
 
 const Setting = ({ setIsLoggedIn }) => {
     const navigate = useNavigate();
@@ -9,11 +9,13 @@ const Setting = ({ setIsLoggedIn }) => {
         navigate('/change-password');
     };
 
-    const handleLogout = () => {
+    const handleLogout = async () => {
         if (window.confirm('로그아웃 하시겠습니까?')) {
-            setIsLoggedIn(false);
-            localStorage.removeItem('accessToken');
-            navigate('/login'); // 로그아웃 후 로그인 페이지로 이동
+            const res = await logout();
+            if (res) {
+                setIsLoggedIn(false);
+                navigate('/login'); // 로그아웃 후 로그인 페이지로 이동
+            }
         }
     };
 

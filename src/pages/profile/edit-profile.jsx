@@ -21,9 +21,6 @@ const EditProfile = () => {
                 setPhotoURL(user.photoURL || '');
                 setEmail(user.email || '');
                 setLoading(false);
-            } else {
-                alert('로그인이 필요합니다.');
-                navigate('/login');
             }
         });
 

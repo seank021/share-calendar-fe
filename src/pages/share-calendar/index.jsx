@@ -1,16 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getFriends, getUserInfoByEmail } from '../../apis/api';
+import { getFriends, getUserInfoByEmail, isUserLoggedIn } from '../../apis/api';
 import Loading from '../loading';
 
 const ShareCalendar = () => {
     const navigate = useNavigate();
-
     useEffect(() => {
-        const accessToken = localStorage.getItem('accessToken');
-        if (!accessToken) {
+        try {
+            const fetchUser = async () => {
+                const isUser = await isUserLoggedIn();
+                if (!isUser) {
+                    alert('로그인이 필요합니다.');
+                    navigate('/profile');
+                }
+            };
+
+            fetchUser();
+        } catch (error) {
             alert('로그인이 필요합니다.');
-            navigate('/profile');
+            navigate('/profile'); // 로그인 상태 확인 실패 시 프로필로 이동
         }
     }, [navigate]);
 

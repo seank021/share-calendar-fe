@@ -6,15 +6,24 @@ import Loading from '../loading';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { collection, onSnapshot } from 'firebase/firestore';
 import { app, db } from '../../firebase';
+import { isUserLoggedIn } from '../../apis/api';
 
 const MyCalendar = () => {
     const navigate = useNavigate();
-
     useEffect(() => {
-        const accessToken = localStorage.getItem('accessToken');
-        if (!accessToken) {
+        try {
+            const fetchUser = async () => {
+                const isUser = await isUserLoggedIn();
+                if (!isUser) {
+                    alert('로그인이 필요합니다.');
+                    navigate('/profile');
+                }
+            };
+
+            fetchUser();
+        } catch (error) {
             alert('로그인이 필요합니다.');
-            navigate('/profile');
+            navigate('/profile'); // 로그인 상태 확인 실패 시 프로필로 이동
         }
     }, [navigate]);
 
@@ -33,9 +42,6 @@ const MyCalendar = () => {
         const unsubscribeAuth = onAuthStateChanged(auth, user => {
             if (user) {
                 setCurrentUser(user);
-            } else {
-                alert('로그인이 필요합니다.');
-                navigate('/login');
             }
         });
 
