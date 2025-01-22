@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getUserInfo, searchUsersByEmail, getTop3Friends, requestForFriend, getUserInfoByEmail, getRequests } from '../../apis/api';
+import { getUserInfo, searchUsersByEmail, getUserInfoByEmail } from '../../apis/user';
+import { getTop3Friends } from '../../apis/friend';
+import { requestForFriend, getRequests } from '../../apis/request';
 import Loading from '../loading';
 import '../../styles/globals.css';
 
@@ -139,9 +141,7 @@ const My = ({ setIsLoggedIn }) => {
                             onClick={onClickRequests}
                         />
                         {isRequest && (
-                            <div
-                                className="absolute top-[-3px] left-[-17px] w-2 h-2 bg-red-500 rounded-full"
-                            ></div>
+                            <div className="absolute top-[-3px] left-[-17px] w-2 h-2 bg-red-500 rounded-full"></div>
                         )}
                         <img
                             src="/icons/setting.svg"

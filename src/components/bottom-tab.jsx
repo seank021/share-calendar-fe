@@ -8,7 +8,7 @@ import shareCalendar from '/icons/share-calendar.svg';
 import shareCalendarColor from '/icons/share-calendar-color.svg';
 import profile from '/icons/profile.svg';
 import profileColor from '/icons/profile-color.svg';
-import { isUserLoggedIn } from '../apis/api';
+import { isUserLoggedIn } from '../apis/auth';
 
 const BottomTab = () => {
     const location = useLocation();

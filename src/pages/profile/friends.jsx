@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getFriends, deleteFriend, getUserInfoByEmail } from '../../apis/api';
+import { getFriends, deleteFriend } from '../../apis/friend';
+import { getUserInfoByEmail } from '../../apis/user';
 
 const Friends = () => {
     const navigate = useNavigate();

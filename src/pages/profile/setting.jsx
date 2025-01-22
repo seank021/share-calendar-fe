@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { verifyEmail, logout } from '../../apis/api';
+import { verifyEmail, logout } from '../../apis/auth';
 
 const Setting = ({ setIsLoggedIn }) => {
     const navigate = useNavigate();

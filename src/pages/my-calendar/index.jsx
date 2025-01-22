@@ -6,7 +6,7 @@ import Loading from '../loading';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { collection, onSnapshot } from 'firebase/firestore';
 import { app, db } from '../../firebase';
-import { isUserLoggedIn } from '../../apis/api';
+import { isUserLoggedIn } from '../../apis/auth';
 
 const MyCalendar = () => {
     const navigate = useNavigate();

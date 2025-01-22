@@ -3,7 +3,7 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { app } from '../../firebase';
 import Loading from '../loading';
-import { updateProfileInfo } from '../../apis/api';
+import { updateProfileInfo } from '../../apis/user';
 
 const EditProfile = () => {
     const navigate = useNavigate();

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { getUserEvents } from '../../apis/api';
+import { getUserEvents } from '../../apis/user';
 import Loading from '../loading';
 import CalendarTimeline from '../../components/calendar-timeline';
 

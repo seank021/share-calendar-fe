@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { isUserLoggedIn } from '../../apis/api';
+import { isUserLoggedIn } from '../../apis/auth';
 
 /* pages */
 import Login from './login';
 import My from './my';
 import Loading from '../loading';
 
-const Profile = () => {    
+const Profile = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [loading, setLoading] = useState(true);
 

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getFriends, getUserInfoByEmail, isUserLoggedIn } from '../../apis/api';
+import { getFriends } from '../../apis/friend';
+import { getUserInfoByEmail } from '../../apis/user';
+import { isUserLoggedIn } from '../../apis/auth';
 import Loading from '../loading';
 
 const ShareCalendar = () => {

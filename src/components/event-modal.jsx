@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { deleteEvent } from '../apis/api';
+import { deleteEvent } from '../apis/event';
 
 const EventModal = ({ date, events, onClose, onAddEvent }) => {
     const navigate = useNavigate();

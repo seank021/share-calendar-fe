@@ -24,7 +24,7 @@ import ChangePassword from './pages/profile/change-password';
 import FindPassword from './pages/profile/find-password';
 import NotFound from './pages/not-found';
 
-import { changeImage } from './apis/api';
+import { changeImage } from './apis/user';
 
 const App = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);

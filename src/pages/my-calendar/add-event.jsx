@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ColorSelectModal from '../../components/color-select-modal';
-import { addEvent } from '../../apis/api';
+import { addEvent } from '../../apis/event';
 
 const AddEvent = () => {
     const navigate = useNavigate();

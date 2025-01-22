@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import ColorSelectModal from '../../components/color-select-modal';
-import { updateEvent } from '../../apis/api';
+import { updateEvent } from '../../apis/event';
 
 const EditEvent = () => {
     const location = useLocation();
