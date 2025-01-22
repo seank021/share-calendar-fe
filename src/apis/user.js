@@ -106,47 +106,22 @@ export const updateProfileInfo = async (photoURL, nickname) => {
         const auth = getAuth(app);
         const currentUser = auth.currentUser;
 
-        // Firebase Authentication 프로필 업데이트
+        // Firebase Authentication 프로필 업데이트 (photoURL 제외)
         await updateProfile(currentUser, {
             displayName: nickname,
-            photoURL: photoURL,
         });
 
         // Firestore에서 사용자 문서 업데이트
         const userDocRef = doc(db, 'users', currentUser.email);
         await updateDoc(userDocRef, {
             displayName: nickname,
-            photoURL: photoURL,
+            photoURL: photoURL, // Firestore에 저장
         });
 
         return true;
     } catch (error) {
         console.error('프로필 수정 실패:', error);
         alert('프로필 수정에 실패했습니다.');
-        return false;
-    }
-};
-
-// custom api - app.js에서 필요할 때 사용
-export const changeImage = async (email, image) => {
-    try {
-        // Firestore의 users 컬렉션에 사용자 정보 추가
-        const userDocRef = doc(db, 'users', email);
-        await updateDoc(userDocRef, {
-            photoURL: image,
-        });
-
-        // Firebase Authentication 프로필 업데이트
-        const auth = getAuth(app);
-        const currentUser = auth.currentUser;
-        await updateProfile(currentUser, {
-            photoURL: image,
-        });
-
-        return true;
-    } catch (error) {
-        console.error('이미지 변경 실패:', error);
-        alert('이미지 변경에 실패했습니다.');
         return false;
     }
 };

@@ -3,7 +3,7 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { app } from '../../firebase';
 import Loading from '../loading';
-import { updateProfileInfo } from '../../apis/user';
+import { getUserInfoByEmail, updateProfileInfo } from '../../apis/user';
 
 const EditProfile = () => {
     const navigate = useNavigate();
@@ -15,22 +15,65 @@ const EditProfile = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, user => {
+        const unsubscribe = onAuthStateChanged(auth, async (user) => {
             if (user) {
                 setNickname(user.displayName || '');
-                setPhotoURL(user.photoURL || '');
                 setEmail(user.email || '');
+                try {
+                    // Firestore에서 photoURL 가져오기
+                    const userInfo = await getUserInfoByEmail(user.email);
+                    if (userInfo?.photoURL) {
+                        setPhotoURL(userInfo.photoURL);
+                    }
+                } catch (error) {
+                    console.error('프로필 사진 가져오기 실패:', error);
+                }
                 setLoading(false);
             }
         });
 
         // 컴포넌트 언마운트 시 리스너 해제
         return () => unsubscribe();
-    }, [auth, navigate]);
+    }, [auth]);
 
-    const editProfilePhoto = () => {
-        console.log('프로필 사진 수정');
-    };
+    const handleImageChange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                const img = new Image();
+                img.src = reader.result;
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    const MAX_WIDTH = 300; // 최대 너비
+                    const MAX_HEIGHT = 300; // 최대 높이
+    
+                    let width = img.width;
+                    let height = img.height;
+    
+                    // 크기 조정
+                    if (width > height && width > MAX_WIDTH) {
+                        height *= MAX_WIDTH / width;
+                        width = MAX_WIDTH;
+                    } else if (height > MAX_HEIGHT) {
+                        width *= MAX_HEIGHT / height;
+                        height = MAX_HEIGHT;
+                    }
+    
+                    canvas.width = width;
+                    canvas.height = height;
+    
+                    ctx.drawImage(img, 0, 0, width, height);
+    
+                    // 압축된 base64 데이터 생성
+                    const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.8); // 품질 80%
+                    setPhotoURL(compressedDataUrl);
+                };
+            };
+            reader.readAsDataURL(file);
+        }
+    };    
 
     const handleSave = async () => {
         const result = await updateProfileInfo(photoURL, nickname);
@@ -62,8 +105,15 @@ const EditProfile = () => {
                     <img
                         src={photoURL || '/images/no-profile.png'}
                         alt="profile"
-                        className="w-[120px] h-[120px] rounded-full"
-                        onClick={editProfilePhoto}
+                        className="w-[120px] h-[120px] rounded-full cursor-pointer"
+                        onClick={() => document.getElementById('profileImageInput').click()}
+                    />
+                    <input
+                        type="file"
+                        id="profileImageInput"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={handleImageChange}
                     />
                 </div>
                 {/* 닉네임 */}

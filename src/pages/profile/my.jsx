@@ -10,6 +10,7 @@ const My = ({ setIsLoggedIn }) => {
     const navigate = useNavigate();
 
     const [userInfo, setUserInfo] = useState(null);
+    const [photoURL, setPhotoURL] = useState('');
     const [loading, setLoading] = useState(true);
 
     const [searchEmail, setSearchEmail] = useState('');
@@ -21,6 +22,15 @@ const My = ({ setIsLoggedIn }) => {
             const user = await getUserInfo();
             if (user) {
                 setUserInfo(user);
+                try {
+                    // Firestore에서 photoURL 가져오기
+                    const userInfo_ = await getUserInfoByEmail(user.email);
+                    if (userInfo_?.photoURL) {
+                        setPhotoURL(userInfo_.photoURL);
+                    }
+                } catch (error) {
+                    console.error('프로필 사진 가져오기 실패:', error);
+                }
             } else {
                 setIsLoggedIn(false);
             }
@@ -158,8 +168,8 @@ const My = ({ setIsLoggedIn }) => {
 
                 {/* 사용자 정보 */}
                 <div className="flex items-center space-x-3">
-                    {userInfo.photoURL ? (
-                        <img src={userInfo.photoURL} alt="profile" className="w-[80px] h-[80px] rounded-full" />
+                    {photoURL ? (
+                        <img src={photoURL} alt="profile" className="w-[80px] h-[80px] rounded-full" />
                     ) : (
                         <img src="/images/no-profile.png" alt="profile" className="w-[80px] h-[80px] rounded-full" />
                     )}
