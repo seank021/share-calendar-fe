@@ -108,13 +108,19 @@ const EditProfile = () => {
                         className="w-[120px] h-[120px] rounded-full cursor-pointer"
                         onClick={() => document.getElementById('profileImageInput').click()}
                     />
-                    <input
-                        type="file"
-                        id="profileImageInput"
-                        accept="image/*"
-                        className="hidden"
-                        onChange={handleImageChange}
-                    />
+                    <label
+                        htmlFor="profileImageInput"
+                        className="text-blue-500 cursor-pointer text-sm mt-1"
+                    >
+                        <input
+                            type="file"
+                            id="profileImageInput"
+                            accept="image/*"
+                            className="hidden"
+                            onChange={handleImageChange}
+                        />
+                        프로필 사진 변경
+                    </label>
                 </div>
                 {/* 닉네임 */}
                 <div className="flex flex-col">
