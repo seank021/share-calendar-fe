@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getUserInfo, searchUsersByEmail, getTop3Friends, requestForFriend, getUserInfoByEmail } from '../../apis/api';
+import { getUserInfo, searchUsersByEmail, getTop3Friends, requestForFriend, getUserInfoByEmail, getRequests } from '../../apis/api';
 import Loading from '../loading';
 import '../../styles/globals.css';
 
@@ -29,6 +29,21 @@ const My = ({ setIsLoggedIn }) => {
 
         fetchUserInfo();
     }, [setIsLoggedIn]);
+
+    const [isRequest, setIsRequest] = useState(false);
+    useEffect(() => {
+        const fetchRequests = async () => {
+            try {
+                const reqs = await getRequests();
+                const isReq = reqs.some(req => req.resolved === false);
+                setIsRequest(isReq);
+            } catch (error) {
+                alert(error.message);
+            }
+        };
+
+        fetchRequests();
+    }, []);
 
     const onClickSetting = () => {
         navigate('/setting');
@@ -118,13 +133,18 @@ const My = ({ setIsLoggedIn }) => {
             <div className="container-col w-[90%] py-4 mx-auto gap-6">
                 <div className="flex justify-between items-center">
                     <img src="/images/logo-title.png" alt="logo" className="h-[45px]" onClick={onClickLogo} />
-                    <div className="flex items-center space-x-3">
+                    <div className="flex items-center space-x-3 relative">
                         <img
                             src="icons/request.svg"
                             alt="request"
                             className="w-[27px] h-[27px]"
                             onClick={onClickRequests}
                         />
+                        {isRequest && (
+                            <div
+                                className="absolute top-[-3px] left-[-17px] w-2 h-2 bg-red-500 rounded-full"
+                            ></div>
+                        )}
                         <img
                             src="/icons/setting.svg"
                             alt="setting"
