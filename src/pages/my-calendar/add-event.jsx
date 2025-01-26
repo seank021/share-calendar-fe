@@ -54,7 +54,7 @@ const AddEvent = () => {
                     ctx.drawImage(img, 0, 0, width, height);
 
                     const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.8); // 품질 80%
-                    
+
                     // 중복된 사진은 추가하지 않음
                     if (!photoUrls.includes(compressedDataUrl)) {
                         setPhotoUrls([...photoUrls, compressedDataUrl]);
@@ -65,7 +65,7 @@ const AddEvent = () => {
         }
     };
 
-    const onClickPhoto = (photoUrl) => {
+    const onClickPhoto = photoUrl => {
         if (window.confirm('사진을 삭제하시겠습니까?')) {
             setPhotoUrls(photoUrls.filter(url => url !== photoUrl));
         }
@@ -178,7 +178,7 @@ const AddEvent = () => {
 
                 {/* 사진 첨부 */}
                 <div className="flex flex-col items-start">
-                    <div className='flex items-center'>
+                    <div className="flex items-center">
                         <img src="/icons/camera.svg" alt="사진" className="w-5 h-5 mr-3" />
                         <label htmlFor="photoInput" className="text-blue-500 cursor-pointer">
                             <input
@@ -187,7 +187,7 @@ const AddEvent = () => {
                                 accept="image/*"
                                 className="hidden"
                                 onChange={handleImageChange}
-                                />
+                            />
                             사진 첨부
                         </label>
                     </div>

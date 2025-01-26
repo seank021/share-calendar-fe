@@ -23,12 +23,7 @@ const EventDetailModal = ({ event, onClose }) => {
                 {event.photoUrls && (
                     <div className="mt-4 overflow-x-auto flex gap-4" style={{ width: '100%' }}>
                         {event.photoUrls.map((url, index) => (
-                            <img
-                                key={index}
-                                src={url}
-                                alt="event"
-                                className="w-24 h-24 object-cover rounded-lg"
-                            />
+                            <img key={index} src={url} alt="event" className="w-24 h-24 object-cover rounded-lg" />
                         ))}
                     </div>
                 )}

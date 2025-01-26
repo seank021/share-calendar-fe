@@ -122,7 +122,11 @@ const CalendarComparison = () => {
                     {myEvents.length > 0 ? (
                         <div className="relative w-full h-full">
                             {renderHourLines()} {/* 시간대 라인 */}
-                            <CalendarTimeline events={myEvents} selectedEvent={selectedEvent} setSelectedEvent={setSelectedEvent} />
+                            <CalendarTimeline
+                                events={myEvents}
+                                selectedEvent={selectedEvent}
+                                setSelectedEvent={setSelectedEvent}
+                            />
                         </div>
                     ) : (
                         <div className="flex items-center justify-center h-full">
@@ -140,7 +144,11 @@ const CalendarComparison = () => {
                     {friendEvents.length > 0 ? (
                         <div className="relative w-full h-full">
                             {renderHourLines()} {/* 시간대 라인 */}
-                            <CalendarTimeline events={friendEvents} selectedEvent={selectedEvent} setSelectedEvent={setSelectedEvent} />
+                            <CalendarTimeline
+                                events={friendEvents}
+                                selectedEvent={selectedEvent}
+                                setSelectedEvent={setSelectedEvent}
+                            />
                         </div>
                     ) : (
                         <div className="flex items-center justify-center h-full">

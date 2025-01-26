@@ -35,7 +35,7 @@ const EditEvent = () => {
                 img.onload = () => {
                     const canvas = document.createElement('canvas');
                     const ctx = canvas.getContext('2d');
-                    const MAX_WIDTH = 300; // 최대 너비 
+                    const MAX_WIDTH = 300; // 최대 너비
                     const MAX_HEIGHT = 300; // 최대 높이
 
                     let width = img.width;
@@ -189,7 +189,7 @@ const EditEvent = () => {
 
                 {/* 사진 첨부 */}
                 <div className="flex flex-col items-start">
-                    <div className='flex items-center'>
+                    <div className="flex items-center">
                         <img src="/icons/camera.svg" alt="사진" className="w-5 h-5 mr-3" />
                         <label htmlFor="photoInput" className="text-blue-500 cursor-pointer">
                             <input
@@ -198,7 +198,7 @@ const EditEvent = () => {
                                 accept="image/*"
                                 className="hidden"
                                 onChange={handleImageChange}
-                                />
+                            />
                             사진 첨부
                         </label>
                     </div>

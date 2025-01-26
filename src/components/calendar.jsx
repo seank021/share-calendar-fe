@@ -28,10 +28,7 @@ const Calendar = ({ events, onDateClick, currentDate }) => {
             </div>
             <div className="grid grid-cols-7 text-center font-semibold text-sm pb-1 border-b-[1px] mb-1">
                 {weekDays.map((day, idx) => (
-                    <div
-                        key={idx}
-                        className={day === '일' ? 'text-red-500' : day === '토' ? 'text-blue-500' : ''}
-                    >
+                    <div key={idx} className={day === '일' ? 'text-red-500' : day === '토' ? 'text-blue-500' : ''}>
                         {day}
                     </div>
                 ))}

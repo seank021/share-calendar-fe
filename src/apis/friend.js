@@ -51,7 +51,10 @@ export const getTop4Friends = async () => {
                     return resolve([]);
                 }
 
-                const friends = friendsSnapshot.docs.map(doc => doc.data()).sort(() => 0.5 - Math.random()).slice(0, 4); // 상위 4명 랜덤으로 가져오기
+                const friends = friendsSnapshot.docs
+                    .map(doc => doc.data())
+                    .sort(() => 0.5 - Math.random())
+                    .slice(0, 4); // 상위 4명 랜덤으로 가져오기
                 resolve(friends);
             } catch (error) {
                 console.error('친구 목록 조회 실패:', error);

@@ -49,7 +49,15 @@ const CalendarTimeline = ({ events, selectedEvent, setSelectedEvent }) => {
             </div>
 
             {/* 일정 상세 모달 */}
-            {clicked && <EventDetailModal event={clicked} onClose={() => { setSelectedEvent(null); setClicked(null); }} />}
+            {clicked && (
+                <EventDetailModal
+                    event={clicked}
+                    onClose={() => {
+                        setSelectedEvent(null);
+                        setClicked(null);
+                    }}
+                />
+            )}
         </>
     );
 };
