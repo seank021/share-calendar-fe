@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getUserInfo, searchUsersByEmail, getUserInfoByEmail } from '../../apis/user';
-import { getTop3Friends, getFriendsNumber } from '../../apis/friend';
+import { getTop4Friends, getFriendsNumber } from '../../apis/friend';
 import { requestForFriend, getRequests } from '../../apis/request';
 import Loading from '../loading';
 import '../../styles/globals.css';
@@ -68,7 +68,7 @@ const My = ({ setIsLoggedIn }) => {
     useEffect(() => {
         const fetchFriends = async () => {
             try {
-                const rawFriends = await getTop3Friends();
+                const rawFriends = await getTop4Friends();
                 const friendsNumber = await getFriendsNumber();
 
                 const friendsWithNames = await Promise.all(
@@ -209,11 +209,11 @@ const My = ({ setIsLoggedIn }) => {
                             onClick={onClickMoreFriends}
                         />
                     </div>
-                    <div className="flex items-center space-x-4">
+                    <div className="flex items-center space-x-3">
                         {friends && friends.length > 0 ? (
                             friends.map(
                                 (
-                                    friend // 상위 3명
+                                    friend // 상위 4명 (랜덤)
                                 ) => (
                                     <div key={friend.email} className="flex flex-col items-center">
                                         <img
