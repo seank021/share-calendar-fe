@@ -190,7 +190,7 @@ const My = ({ setIsLoggedIn }) => {
                             )}
                         </div>
                         {!userInfo.emailVerified && (
-                            <p className="text-red-500 text-xs mt-1">이메일 인증을 해주세요!</p>
+                            <p className="text-red-500 text-xs mt-1">"환경설정"에서 이메일 인증을 해주세요!</p>
                         )}
                     </div>
                 </div>
