@@ -35,17 +35,26 @@ const Setting = ({ setIsLoggedIn }) => {
             </div>
             {/* 이메일 인증 */}
             <div className="flex items-center justify-between px-4 py-3 border-b" onClick={verifyEmail}>
-                <p className="text-md">이메일 인증</p>
+                <div className="flex items-center gap-3">
+                    <img src="/icons/mail.svg" alt="이메일 인증" className="w-6 h-6" />
+                    <p className="text-md">이메일 인증</p>
+                </div>
                 <img src="/icons/chevron-right.svg" alt="이메일 인증" className="w-6 h-6" />
             </div>
             {/* 비밀번호 변경 */}
             <div className="flex items-center justify-between px-4 py-3 border-b" onClick={onClickChangePassword}>
-                <p className="text-md">비밀번호 변경</p>
+                <div className="flex items-center gap-3">
+                    <img src="/icons/lock.svg" alt="비밀번호 변경" className="w-6 h-6" />
+                    <p className="text-md">비밀번호 변경</p>
+                </div>
                 <img src="/icons/chevron-right.svg" alt="비밀번호 변경" className="w-6 h-6" />
             </div>
             {/* 로그아웃 버튼 */}
             <div className="flex items-center justify-between px-4 py-3 border-b" onClick={handleLogout}>
-                <p className="text-md">로그아웃</p>
+                <div className="flex items-center gap-3">
+                    <img src="/icons/logout.svg" alt="로그아웃" className="w-6 h-6" />
+                    <p className="text-md">로그아웃</p>
+                </div>
                 <img src="/icons/chevron-right.svg" alt="로그아웃" className="w-6 h-6" />
             </div>
             {/* 회원탈퇴 */}
