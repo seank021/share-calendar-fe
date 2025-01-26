@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import ColorSelectModal from '../../components/color-select-modal';
 import { updateEvent } from '../../apis/event';
+import dayjs from 'dayjs';
 
 const EditEvent = () => {
     const location = useLocation();
@@ -9,15 +10,7 @@ const EditEvent = () => {
     const selectedEvent = location.state?.event;
 
     const formatDateForInput = dateString => {
-        const [year, month, day] = dateString.split('-').map(Number);
-        const formattedMonth = month.toString().padStart(2, '0');
-        const formattedDay = day.toString().padStart(2, '0');
-        return `${year}-${formattedMonth}-${formattedDay}`;
-    };
-
-    const reverseFormatDate = dateString => {
-        const [year, month, day] = dateString.split('-').map(Number);
-        return `${year}-${month}-${day}`;
+        return dayjs(dateString).format('YYYY-MM-DD');
     };
 
     // 기존 일정 정보 기본 값으로 설정
@@ -93,7 +86,7 @@ const EditEvent = () => {
         }
 
         const updatedEvent = {
-            date: reverseFormatDate(date),
+            date: date,
             title,
             color,
             time: `${startTime} ~ ${endTime}`,

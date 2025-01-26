@@ -1,46 +1,40 @@
-import React from 'react';
+import dayjs from 'dayjs';
 
 const Calendar = ({ events, onDateClick, currentDate }) => {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
 
     const getDaysInMonth = (year, month) => {
-        return new Date(year, month + 1, 0).getDate();
+        return dayjs(`${year}-${month + 1}-01`).daysInMonth();
     };
 
     const daysInMonth = getDaysInMonth(year, month);
-    const firstDay = new Date(year, month, 1).getDay();
+    const firstDay = dayjs(`${year}-${month + 1}-01`).day();
 
     const weekDays = ['일', '월', '화', '수', '목', '금', '토'];
 
-    // 오늘 날짜 정보
-    const today = new Date();
+    const today = dayjs();
     const isToday = (currentYear, currentMonth, day) =>
-        today.getFullYear() === currentYear && today.getMonth() === currentMonth && today.getDate() === day;
+        today.isSame(dayjs(`${currentYear}-${currentMonth + 1}-${day}`), 'day');
 
     return (
         <div className="px-1 py-3">
             <div className="text-center mb-4">
-                {(year !== new Date().getFullYear() && (
+                {(year !== today.year() && (
                     <span className="text-xl font-semibold">
                         {year}년 {month + 1}월
                     </span>
                 )) || <span className="text-xl font-semibold">{month + 1}월</span>}
             </div>
             <div className="grid grid-cols-7 text-center font-semibold text-sm pb-1 border-b-[1px] mb-1">
-                {weekDays.map(
-                    (day, idx) =>
-                        (day === '일' && (
-                            <div key={idx} className="text-red-500">
-                                {day}
-                            </div>
-                        )) ||
-                        (day === '토' && (
-                            <div key={idx} className="text-blue-500">
-                                {day}
-                            </div>
-                        )) || <div key={idx}>{day}</div>
-                )}
+                {weekDays.map((day, idx) => (
+                    <div
+                        key={idx}
+                        className={day === '일' ? 'text-red-500' : day === '토' ? 'text-blue-500' : ''}
+                    >
+                        {day}
+                    </div>
+                ))}
             </div>
             <div
                 className="grid grid-cols-7 gap-[0.7px]"
@@ -53,8 +47,8 @@ const Calendar = ({ events, onDateClick, currentDate }) => {
                     <div key={idx}></div>
                 ))}
                 {Array.from({ length: daysInMonth }).map((_, day) => {
-                    const date = `${year}-${month + 1}-${day + 1}`;
-                    const dayEvents = events.filter(event => event.date === date);
+                    const date = dayjs(`${year}-${month + 1}-${day + 1}`).format('YYYY-MM-DD');
+                    const dayEvents = events.filter(event => dayjs(event.date).format('YYYY-MM-DD') === date);
                     const isCurrentDay = isToday(year, month, day + 1); // 오늘인지 확인
 
                     return (

@@ -3,6 +3,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { getUserEvents } from '../../apis/user';
 import Loading from '../loading';
 import CalendarTimeline from '../../components/calendar-timeline';
+import dayjs from 'dayjs';
 
 const CalendarComparison = () => {
     const navigate = useNavigate();
@@ -14,17 +15,17 @@ const CalendarComparison = () => {
     const [myEvents, setMyEvents] = useState([]);
     const [friendEvents, setFriendEvents] = useState([]);
 
-    const [selectedDate, setSelectedDate] = useState(new Date());
-    const selectedYear = selectedDate.getFullYear();
-    const selectedMonth = selectedDate.getMonth() + 1; // 0부터 시작하므로 +1
-    const selectedDay = selectedDate.getDate();
+    const [selectedDate, setSelectedDate] = useState(dayjs());
+    const selectedYear = selectedDate.format('YYYY');
+    const selectedMonth = selectedDate.format('MM');
+    const selectedDay = selectedDate.format('DD');
 
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchEvents = async () => {
             try {
-                const formattedDate = `${selectedYear}-${String(selectedMonth)}-${String(selectedDay)}`;
+                const formattedDate = selectedDate.format('YYYY-MM-DD');
 
                 // 내 일정 가져오기
                 const myData = await getUserEvents('my', formattedDate, false);
@@ -44,17 +45,12 @@ const CalendarComparison = () => {
     }, [selectedDate, friendEmail, selectedYear, selectedMonth, selectedDay]);
 
     const handleDateChange = direction => {
-        const newDate = new Date(selectedDate);
-        newDate.setDate(newDate.getDate() + direction);
+        const newDate = direction === 'left' ? selectedDate.subtract(1, 'day') : selectedDate.add(1, 'day');
         setSelectedDate(newDate);
     };
 
     const handleSwipe = direction => {
-        if (direction === 'left') {
-            handleDateChange(-1); // 이전 날짜
-        } else if (direction === 'right') {
-            handleDateChange(1); // 다음 날짜
-        }
+        handleDateChange(direction);
     };
 
     const handleTouchStart = e => {

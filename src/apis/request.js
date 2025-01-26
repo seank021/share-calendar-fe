@@ -2,6 +2,7 @@ import { collection, doc, setDoc, updateDoc, getDocs } from 'firebase/firestore'
 import { app, db } from '../firebase';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { getFriends } from './friend';
+import dayjs from 'dayjs';
 
 export const requestForFriend = async (friendEmail, friendUid) => {
     if (!friendEmail || !friendUid) {
@@ -28,7 +29,7 @@ export const requestForFriend = async (friendEmail, friendUid) => {
         const friendDocRef = doc(db, 'users', friendEmail, 'requests', currentUser.email);
         await setDoc(friendDocRef, {
             email: currentUser.email,
-            createdAt: new Date(),
+            createdAt: dayjs().toISOString(),
             resolved: false,
         });
 

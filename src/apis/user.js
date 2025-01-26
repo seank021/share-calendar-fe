@@ -1,6 +1,7 @@
 import { collection, doc, updateDoc, query, where, getDocs, getDoc } from 'firebase/firestore';
 import { app, db } from '../firebase';
 import { getAuth, updateProfile, onAuthStateChanged } from 'firebase/auth';
+import dayjs from 'dayjs';
 
 export const getUserInfo = async () => {
     const auth = getAuth(app);
@@ -58,7 +59,7 @@ export const getUserEvents = async (email, date, includePrivate) => {
                 }
 
                 let events = eventsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                events = events.filter(event => event.date === date);
+                events = events.filter(event => dayjs(event.date).format('YYYY-MM-DD') === date);
 
                 if (!includePrivate) {
                     events = events.filter(event => !event.isPrivate);

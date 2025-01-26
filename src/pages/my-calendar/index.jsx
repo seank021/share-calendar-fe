@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Calendar from '../../components/calendar';
 import EventModal from '../../components/event-modal';
 import Loading from '../loading';
+import dayjs from 'dayjs';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { collection, onSnapshot } from 'firebase/firestore';
 import { app, db } from '../../firebase';
@@ -27,18 +28,15 @@ const MyCalendar = () => {
         }
     }, [navigate]);
 
-    const [currentDate, setCurrentDate] = useState(new Date());
+    const [currentDate, setCurrentDate] = useState(dayjs());
     const [events, setEvents] = useState([]);
     const [currentUser, setCurrentUser] = useState(null);
-
     const [selectedDate, setSelectedDate] = useState(null);
     const [showModal, setShowModal] = useState(false);
-
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const auth = getAuth(app);
-
         const unsubscribeAuth = onAuthStateChanged(auth, user => {
             if (user) {
                 setCurrentUser(user);
@@ -78,14 +76,15 @@ const MyCalendar = () => {
     const doubleClickThreshold = 300; // 밀리초 기준
 
     const handleDateClick = date => {
-        const currentTimestamp = new Date().getTime();
-        const dayEvents = events.filter(event => event.date === date);
+        const currentTimestamp = dayjs().valueOf();
+        const formattedDate = dayjs(date).format('YYYY-MM-DD');
+        const dayEvents = events.filter(event => dayjs(event.date).format('YYYY-MM-DD') === formattedDate);
 
         if (currentTimestamp - lastClickTimestamp < doubleClickThreshold) {
             navigate(`/add-event?date=${date}`);
         } else {
             if (dayEvents.length > 0) {
-                setSelectedDate({ date, events: dayEvents }); // 이미 정렬된 상태
+                setSelectedDate({ date: formattedDate, events: dayEvents }); // 이미 정렬된 상태
                 setShowModal(true);
             } else {
                 console.log('더블 클릭으로 일정 추가 페이지로 이동 가능');
@@ -95,12 +94,7 @@ const MyCalendar = () => {
     };
 
     const handleSwipe = direction => {
-        const newDate = new Date(currentDate);
-        if (direction === 'left') {
-            newDate.setMonth(currentDate.getMonth() - 1);
-        } else if (direction === 'right') {
-            newDate.setMonth(currentDate.getMonth() + 1);
-        }
+        const newDate = direction === 'left' ? currentDate.subtract(1, 'month') : currentDate.add(1, 'month');
         setCurrentDate(newDate);
     };
 
@@ -118,7 +112,7 @@ const MyCalendar = () => {
             }}
             className="select-none"
         >
-            <Calendar events={events} onDateClick={handleDateClick} currentDate={currentDate} />
+            <Calendar events={events} onDateClick={handleDateClick} currentDate={currentDate.toDate()} />
             {showModal && selectedDate && (
                 <EventModal
                     date={selectedDate.date}

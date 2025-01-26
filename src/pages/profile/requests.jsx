@@ -77,7 +77,7 @@ const Requests = () => {
                                     {request.displayName} ({request.email})
                                 </p>
                                 <p className="text-xs text-gray-400 tracking-tighter">
-                                    {request.createdAt.toDate().toLocaleDateString()}
+                                    {request.createdAt.split('T')[0]}
                                 </p>
                                 <p className="text-xs tracking-tighter text-gray-400">
                                     수락 시 서로의 일정이 공유됩니다.
