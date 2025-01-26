@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import EventDetailModal from './modal';
 
-const CalendarTimeline = ({ events }) => {
-    const [selectedEvent, setSelectedEvent] = useState(null); // State to hold selected event
+const CalendarTimeline = ({ events, selectedEvent, setSelectedEvent }) => {
+    const [clicked, setClicked] = useState(null); // selectedEvent와 동일한 역할
 
     const totalHeight = 960; // 960px for 24 hours
     const hourHeight = totalHeight / 24; // Each hour occupies an equal portion of the timeline
@@ -37,7 +37,10 @@ const CalendarTimeline = ({ events }) => {
                                 height: `${calculateHeight(startTime, endTime)}px`,
                                 backgroundColor: event.color,
                             }}
-                            onClick={() => setSelectedEvent(event)} // Open modal with selected event
+                            onClick={() => {
+                                setSelectedEvent(event);
+                                setClicked(event);
+                            }} // Open modal with selected event
                         >
                             <h3 className="font-semibold text-center">{event.title}</h3>
                         </div>
@@ -46,7 +49,7 @@ const CalendarTimeline = ({ events }) => {
             </div>
 
             {/* 일정 상세 모달 */}
-            {selectedEvent && <EventDetailModal event={selectedEvent} onClose={() => setSelectedEvent(null)} />}
+            {clicked && <EventDetailModal event={clicked} onClose={() => { setSelectedEvent(null); setClicked(null); }} />}
         </>
     );
 };

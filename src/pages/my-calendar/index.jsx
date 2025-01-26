@@ -94,8 +94,10 @@ const MyCalendar = () => {
     };
 
     const handleSwipe = direction => {
-        const newDate = direction === 'left' ? currentDate.subtract(1, 'month') : currentDate.add(1, 'month');
-        setCurrentDate(newDate);
+        if (!showModal) {
+            const newDate = direction === 'left' ? currentDate.subtract(1, 'month') : currentDate.add(1, 'month');
+            setCurrentDate(newDate);
+        }
     };
 
     if (loading) {

@@ -14,6 +14,7 @@ const CalendarComparison = () => {
 
     const [myEvents, setMyEvents] = useState([]);
     const [friendEvents, setFriendEvents] = useState([]);
+    const [selectedEvent, setSelectedEvent] = useState(null); // 모달에 보여줄 선택된 이벤트
 
     const [selectedDate, setSelectedDate] = useState(dayjs());
     const selectedYear = selectedDate.format('YYYY');
@@ -50,17 +51,24 @@ const CalendarComparison = () => {
     };
 
     const handleSwipe = direction => {
-        handleDateChange(direction);
+        if (!selectedEvent) {
+            // 모달이 열려 있을 때는 스와이프 이벤트를 무시
+            handleDateChange(direction);
+        }
     };
 
     const handleTouchStart = e => {
-        e.currentTarget.startX = e.touches[0].clientX;
+        if (!selectedEvent) {
+            e.currentTarget.startX = e.touches[0].clientX;
+        }
     };
 
     const handleTouchEnd = e => {
-        const deltaX = e.changedTouches[0].clientX - e.currentTarget.startX;
-        if (deltaX > 100) handleSwipe('left');
-        else if (deltaX < -100) handleSwipe('right');
+        if (!selectedEvent) {
+            const deltaX = e.changedTouches[0].clientX - e.currentTarget.startX;
+            if (deltaX > 100) handleSwipe('left');
+            else if (deltaX < -100) handleSwipe('right');
+        }
     };
 
     if (loading) {
@@ -114,7 +122,7 @@ const CalendarComparison = () => {
                     {myEvents.length > 0 ? (
                         <div className="relative w-full h-full">
                             {renderHourLines()} {/* 시간대 라인 */}
-                            <CalendarTimeline events={myEvents} />
+                            <CalendarTimeline events={myEvents} selectedEvent={selectedEvent} setSelectedEvent={setSelectedEvent} />
                         </div>
                     ) : (
                         <div className="flex items-center justify-center h-full">
@@ -132,7 +140,7 @@ const CalendarComparison = () => {
                     {friendEvents.length > 0 ? (
                         <div className="relative w-full h-full">
                             {renderHourLines()} {/* 시간대 라인 */}
-                            <CalendarTimeline events={friendEvents} />
+                            <CalendarTimeline events={friendEvents} selectedEvent={selectedEvent} setSelectedEvent={setSelectedEvent} />
                         </div>
                     ) : (
                         <div className="flex items-center justify-center h-full">

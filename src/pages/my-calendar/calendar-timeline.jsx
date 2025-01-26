@@ -51,7 +51,7 @@ const CalendarTimelinePage = () => {
                     {events.length > 0 ? (
                         <div className="relative w-full h-full">
                             {renderHourLines()} {/* 시간대 라인 */}
-                            <CalendarTimeline events={events} />
+                            <CalendarTimeline events={events} selectedEvent={null} setSelectedEvent={() => {}} />
                         </div>
                     ) : (
                         <div className="flex items-center justify-center h-full">
